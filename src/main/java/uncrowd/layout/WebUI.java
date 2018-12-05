@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import uncrowd.logic.BusinessService;
 import uncrowd.logic.MessageAlreadyExistsException;
 import uncrowd.logic.MessageNotFoundException;
 import uncrowd.logic.MessageService;
@@ -24,10 +25,13 @@ import uncrowd.logic.Entity.MessageEntity;
 @RestController
 public class WebUI {
 	private MessageService messages;
+	private BusinessService business;
+	
 	
 	@Autowired
-	public void setMessages(MessageService messages) {
+	public void setMessages(MessageService messages,BusinessService business) {
 		this.messages = messages;
+		this.business = business;
 	}
 	
 	
@@ -53,12 +57,12 @@ public class WebUI {
 			path="/upateFromBusiness",
 			produces=MediaType.APPLICATION_JSON_VALUE,
 			consumes=MediaType.APPLICATION_JSON_VALUE)
-	public MessageTO upateFromBusiness (@RequestBody MessageTO newMessage, HttpServletRequest request) throws MessageAlreadyExistsException {
+	public UpdateFromBusinessTO upateFromBusiness (@RequestBody UpdateFromBusinessTO newUpdate, HttpServletRequest request) {
 		
 		System.out.println("\n\n\n upate From Business ************** Remote Address: " + request.getRemoteAddr());
 		
-		return new MessageTO(
-				this.messages.addNewMessage(newMessage.toEntity()));
+		return new UpdateFromBusinessTO(
+				this.business.addNewUpdate(newUpdate.toEntity()));
 	}
 	
 	// Local host 
