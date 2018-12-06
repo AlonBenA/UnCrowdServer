@@ -1,8 +1,8 @@
-package uncrowd.logic.Entity;
+package uncrowd.logic;
 
 
 //Not a Table and just for convenience
-public class UpdateFromBusinessEntity {
+public class UpdateFromBusiness {
 	
 	Integer numberOFPeople;
 	Integer numberOFPeopleThatEnter;
@@ -11,7 +11,7 @@ public class UpdateFromBusinessEntity {
 	String confirmation;
 	
 	
-	public UpdateFromBusinessEntity() {
+	public UpdateFromBusiness() {
 		
 	}
 	

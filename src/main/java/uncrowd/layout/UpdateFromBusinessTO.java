@@ -1,6 +1,6 @@
 package uncrowd.layout;
 
-import uncrowd.logic.Entity.UpdateFromBusinessEntity;
+import uncrowd.logic.UpdateFromBusiness;
 
 public class UpdateFromBusinessTO {
 	
@@ -14,7 +14,7 @@ public class UpdateFromBusinessTO {
 
 	}
 	
-	public UpdateFromBusinessTO(UpdateFromBusinessEntity updateFromBusinessEntity) {
+	public UpdateFromBusinessTO(UpdateFromBusiness updateFromBusinessEntity) {
 		setConfirmation(updateFromBusinessEntity.getConfirmation());
 		setDate(updateFromBusinessEntity.getDate());
 		setNumberOFPeople(updateFromBusinessEntity.getNumberOFPeople());
@@ -63,9 +63,9 @@ public class UpdateFromBusinessTO {
 		this.confirmation = confirmation;
 	}
 
-	public UpdateFromBusinessEntity toEntity()
+	public UpdateFromBusiness toEntity()
 	{
-		UpdateFromBusinessEntity rv = new UpdateFromBusinessEntity();
+		UpdateFromBusiness rv = new UpdateFromBusiness();
 		rv.setConfirmation(this.confirmation);
 		rv.setDate(this.date);
 		rv.setNumberOFPeople(this.numberOFPeople);
