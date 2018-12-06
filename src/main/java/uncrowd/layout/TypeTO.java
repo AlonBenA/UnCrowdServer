@@ -1,30 +1,34 @@
 package uncrowd.layout;
 
+import uncrowd.logic.Entity.BusinessTypeEntity;
+
 public class TypeTO {
 	
-	long NumberID;
-	String Type;
+	Long id;
+	String name;
 	
-	public TypeTO() {
-		// TODO Auto-generated constructor stub
+	public long getId() {
+		return id;
 	}
 
-	public long getNumberID() {
-		return NumberID;
+	public void setNumberID(long id) {
+		this.id = id;
 	}
 
-	public void setNumberID(long numberID) {
-		NumberID = numberID;
+	public String getName() {
+		return name;
 	}
 
-	public String getType() {
-		return Type;
-	}
-
-	public void setType(String type) {
-		Type = type;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
+	public TypeTO(){}
 	
-
+	public TypeTO(BusinessTypeEntity entity){
+		if(entity != null) {
+			this.id = entity.getId();
+			this.name = entity.getName();
+		}
+	}
 }

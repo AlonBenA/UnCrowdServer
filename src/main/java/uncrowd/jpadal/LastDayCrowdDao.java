@@ -1,6 +1,5 @@
 package uncrowd.jpadal;
 
-import org.springframework.context.support.StaticApplicationContext;
 import org.springframework.data.repository.CrudRepository;
 
 import uncrowd.logic.Entity.LastDayCrowdEntity;

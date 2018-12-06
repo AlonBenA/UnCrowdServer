@@ -1,19 +1,26 @@
 package uncrowd.logic.Entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "LastDayCrowd")
 public class LastDayCrowdEntity {
 	Long id;
-	Long businessId;
-	Long type;
+	Integer type;
 	Integer count;
 	Integer timeId;
+	BusinessEntity business;
 	
 	@Id
+	@Column(unique = true, nullable = false)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long getId() {
 		return id;
 	}
@@ -22,19 +29,21 @@ public class LastDayCrowdEntity {
 		this.id = id;
 	}
 
-	public Long getBusinessId() {
-		return businessId;
+	@ManyToOne
+    @JoinColumn(name = "businessId")
+	public BusinessEntity getBusiness() {
+		return business;
 	}
 
-	public void setBusinessId(Long businessId) {
-		this.businessId = businessId;
+	public void setBusiness(BusinessEntity business) {
+		this.business = business;
 	}
 
-	public Long getType() {
+	public Integer getType() {
 		return type;
 	}
 
-	public void setType(Long type) {
+	public void setType(Integer type) {
 		this.type = type;
 	}
 

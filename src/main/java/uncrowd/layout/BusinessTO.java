@@ -1,31 +1,90 @@
 package uncrowd.layout;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import uncrowd.logic.Entity.AverageEntity;
+import uncrowd.logic.Entity.BusinessEntity;
+import uncrowd.logic.Entity.BusinessTypeEntity;
+import uncrowd.logic.Entity.CrowdHistoryEntity;
+import uncrowd.logic.Entity.LastDayCrowdEntity;
+import uncrowd.logic.Entity.OpeningHoursEntity;
+
 public class BusinessTO {
 
-	String id;
+	Long id;
 	String name;
 	String address;
-	String[] workingHours;
-	int[] types;
-	double lat;
-	double lon;
-	int crowdLevel;
-	int numberOfPeople;
+	Double lat;
+	Double lon;
+	Integer crowdLevel;
+	Integer numberOfPeople;
 	String[]  numberOfPeopleDate;
-	int HowMuchPeopleAreLikelyToBe;
+	Integer HowMuchPeopleAreLikelyToBe;
 	String[] HowMuchPeopleAreLikelyToBeDate;
-	UpdateFromBusinessTO[] lastUpdate;
-	AverageTO[] Averages;
+	List<UpdateFromBusinessTO> lastUpdate;
+	List<AverageTO> averages;
+	List<CrowdHistoryTO> crowdHistory;
+	List<LastDayCrowdTO> lastDayCrowd;
+	List<OpeningHoursTO> openingHours;
+	List<TypeTO> types;
 	
-	public BusinessTO() {
-		// TODO Auto-generated constructor stub
+	public BusinessTO(BusinessEntity businessEntity) {
+		if (businessEntity != null) {
+			//TODO: Handle likely to be
+			HowMuchPeopleAreLikelyToBe = 1;
+			this.id = businessEntity.getId();
+			this.name = businessEntity.getName();
+			this.address = businessEntity.getAddress();
+			this.lat = businessEntity.getLatitude();
+			this.lon = businessEntity.getLongitude();
+			this.crowdLevel = businessEntity.getCurrCrowdLevel();
+			this.numberOfPeople = businessEntity.getCurrCrowdCount();
+			
+			// TODO: Handle lastUpdate
+			
+			if(businessEntity.getAverages() != null) {
+				averages = new ArrayList<>();
+				for(AverageEntity averageEntity: businessEntity.getAverages()) {
+					averages.add(new AverageTO(averageEntity));
+				}
+			}
+			
+			if(businessEntity.getCrowdHistory() != null) {
+				crowdHistory = new ArrayList<>();
+				for(CrowdHistoryEntity crowdHistoryEntity: businessEntity.getCrowdHistory()) {
+					crowdHistory.add(new CrowdHistoryTO(crowdHistoryEntity));
+				}
+			}
+			
+			if(businessEntity.getLastDayCrowd() != null) {
+				lastDayCrowd = new ArrayList<>();
+				for(LastDayCrowdEntity lastDayCrowdEntity: businessEntity.getLastDayCrowd()) {
+					lastDayCrowd.add(new LastDayCrowdTO(lastDayCrowdEntity));
+				}
+			}
+			
+			if(businessEntity.getTypes() != null) {
+				types = new ArrayList<>();
+				for(BusinessTypeEntity typeEntity: businessEntity.getTypes()) {
+					types.add(new TypeTO(typeEntity));
+				}
+			}
+			
+			if(businessEntity.getOpeningHours() != null) {
+				openingHours = new ArrayList<>();
+				for(OpeningHoursEntity openingHoursEntity: businessEntity.getOpeningHours()) {
+					openingHours.add(new OpeningHoursTO(openingHoursEntity));
+				}
+			}
+		}
 	}
 
-	public String getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -45,19 +104,19 @@ public class BusinessTO {
 		this.address = address;
 	}
 
-	public String[] getWorkingHours() {
-		return workingHours;
+	public List<OpeningHoursTO> getWorkingHours() {
+		return this.openingHours;
 	}
 
-	public void setWorkingHours(String[] workingHours) {
-		this.workingHours = workingHours;
+	public void setWorkingHours(List<OpeningHoursTO> openingHours) {
+		this.openingHours = openingHours;
 	}
 
-	public int[] getTypes() {
+	public List<TypeTO> getTypes() {
 		return types;
 	}
 
-	public void setTypes(int[] types) {
+	public void setTypes(List<TypeTO> types) {
 		this.types = types;
 	}
 
@@ -117,20 +176,20 @@ public class BusinessTO {
 		HowMuchPeopleAreLikelyToBeDate = howMuchPeopleAreLikelyToBeDate;
 	}
 
-	public UpdateFromBusinessTO[] getLastUpdate() {
+	public List<UpdateFromBusinessTO> getLastUpdate() {
 		return lastUpdate;
 	}
 
-	public void setLastUpdate(UpdateFromBusinessTO[] lastUpdate) {
+	public void setLastUpdate(List<UpdateFromBusinessTO> lastUpdate) {
 		this.lastUpdate = lastUpdate;
 	}
 
-	public AverageTO[] getAverages() {
-		return Averages;
+	public List<AverageTO> getAverages() {
+		return averages;
 	}
 
-	public void setAverages(AverageTO[] averages) {
-		Averages = averages;
+	public void setAverages(List<AverageTO> averages) {
+		this.averages = averages;
 	}
 	
 	

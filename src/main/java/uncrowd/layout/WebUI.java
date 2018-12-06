@@ -1,6 +1,9 @@
 package uncrowd.layout;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -17,23 +20,33 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import uncrowd.logic.BusinessService;
+import uncrowd.logic.ClientService;
 import uncrowd.logic.MessageAlreadyExistsException;
 import uncrowd.logic.MessageNotFoundException;
 import uncrowd.logic.MessageService;
+import uncrowd.logic.Entity.BusinessEntity;
+import uncrowd.logic.Entity.BusinessTypeEntity;
 import uncrowd.logic.Entity.MessageEntity;
 
 @RestController
 public class WebUI {
 	private MessageService messages;
 	private BusinessService business;
+	private ClientService clientService;
 	
 	
 	@Autowired
-	public void setMessages(MessageService messages,BusinessService business) {
+	public void setMessages(MessageService messages,BusinessService business, ClientService clientService) {
 		this.messages = messages;
 		this.business = business;
+		this.clientService = clientService;
 	}
 	
+	
+    @RequestMapping("/hello/{name}")
+    String hello(@PathVariable String name) {
+        return "Hello, " + name + "!";
+    }
 	
 	// Local host 
 	//http://localhost:8083/BusinessID
@@ -54,7 +67,7 @@ public class WebUI {
 	//http://localhost:8083/upateFromBusiness
 	@RequestMapping(
 			method=RequestMethod.POST,
-			path="/upateFromBusiness",
+			path="/updateFromBusiness",
 			produces=MediaType.APPLICATION_JSON_VALUE,
 			consumes=MediaType.APPLICATION_JSON_VALUE)
 	public UpdateFromBusinessTO upateFromBusiness (@RequestBody UpdateFromBusinessTO newUpdate, HttpServletRequest request) {
@@ -93,11 +106,15 @@ public class WebUI {
 			method=RequestMethod.GET,
 			path="/AllBusinessTypes",
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public MessageTO getAllBusinessTypes () throws MessageNotFoundException {
+	public List<TypeTO> getAllBusinessTypes () throws MessageNotFoundException {
 		
-		MessageEntity rv = this.messages.getMessage("Types");
+		List<BusinessTypeEntity> rv = this.clientService.getBusinessesTypes();
+
+		List<TypeTO> typesTO = new ArrayList<>();
 		
-		return new MessageTO(rv);
+		rv.forEach(entity-> typesTO.add(new TypeTO(entity)));
+		
+		return typesTO;
 	}
 	
 	
@@ -107,14 +124,12 @@ public class WebUI {
 			method=RequestMethod.GET,
 			path="/Businessinfo/{id}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public MessageTO Businessinfo (@PathVariable("id") String id) throws MessageNotFoundException {
-		
-		MessageEntity rv = this.messages.getMessage(id);
-		
-		return new MessageTO(rv);
+	public BusinessTO Businessinfo (@PathVariable("id") Long id) throws MessageNotFoundException {		
+		return new BusinessTO(this.clientService.getBusinessUpdate(id));
 	}
 	
-	
+	// Local host 
+	//http://localhost:8083/timeToUpdate
 	@RequestMapping(
 			method=RequestMethod.PUT,
 			path="/timeToUpdate",
@@ -127,6 +142,33 @@ public class WebUI {
 		this.messages.updateMessage("time to update", updatedMessage.toEntity());
 	}
 
+	// Local host 
+	//http://localhost:8083/AllBusinesses/lat/lon/size/page
+	@RequestMapping(
+			method=RequestMethod.GET,
+			path="/AllBusinesses",
+			consumes=MediaType.APPLICATION_JSON_VALUE)
+	public List<BusinessTO> getAllBusinesses (@PathVariable("lat") double latitude,
+			@PathVariable("lon") double longitude,
+			@RequestParam(name="size", required=false, defaultValue="30") int size, 
+			@RequestParam(name="page", required=false, defaultValue="0") int page	) throws Exception {
+		
+		List<BusinessEntity> entitiesList = this.clientService.getAllBusinesses(longitude, latitude, size, page);
+		
+		List<BusinessTO> businessTO = new ArrayList<>();
+		entitiesList.forEach(entity-> businessTO.add(new BusinessTO(entity)));
+		
+		return businessTO;
+	}
+	
+	// Local host 
+	//http://localhost:8083/deafults
+	@RequestMapping(
+			method=RequestMethod.PUT,
+			path="/deafults")
+	public void addDeafultValues () throws Exception {		
+		this.clientService.addDeafultValues();
+	}
 	
 	@ExceptionHandler//(MessageNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)

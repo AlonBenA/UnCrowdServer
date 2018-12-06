@@ -1,15 +1,14 @@
 package uncrowd.layout;
 
+import uncrowd.logic.Entity.AverageEntity;
+
 public class AverageTO {
 	
-	int Day;
-	String hour;
-	double Average;
+	Integer Day;
+	Integer dateTime;
+	Integer Average;
+	Long businessId;
 	
-	public AverageTO() {
-		// TODO Auto-generated constructor stub
-	}
-
 	public int getDay() {
 		return Day;
 	}
@@ -18,22 +17,39 @@ public class AverageTO {
 		Day = day;
 	}
 
-	public String getHour() {
-		return hour;
+	public int getDateTime() {
+		return dateTime;
 	}
 
-	public void setHour(String hour) {
-		this.hour = hour;
+	public void setDateTime(int dateTime) {
+		this.dateTime = dateTime;
 	}
 
 	public double getAverage() {
 		return Average;
 	}
 
-	public void setAverage(double average) {
+	public void setAverage(int average) {
 		Average = average;
 	}
+
+	public Long getBusinessId() {
+		return businessId;
+	}
+
+	public void setBusinessId(Long businessId) {
+		this.businessId = businessId;
+	}
 	
+	public AverageTO() {}
 	
+	public AverageTO(AverageEntity entity) {
+		if(entity != null) {
+			this.Day = entity.getDay();
+			this.dateTime = entity.getDateTime();
+			this.Average = entity.getAverage();
+			this.businessId = entity.getBusiness().getId();
+		}
+	}
 
 }
