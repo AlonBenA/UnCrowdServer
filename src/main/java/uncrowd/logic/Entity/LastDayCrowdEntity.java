@@ -65,4 +65,14 @@ public class LastDayCrowdEntity {
 
 	public LastDayCrowdEntity() {
 	}
+	
+	public LastDayCrowdEntity(Long id,	Integer type,
+	Integer count,
+	Integer timeId,BusinessEntity business) {
+		this.id =id;
+		this.type =type;
+		this.count =count;
+		this.timeId =timeId;
+		this.business =business;
+	}
 }

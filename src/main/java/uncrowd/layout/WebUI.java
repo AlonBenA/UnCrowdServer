@@ -70,9 +70,9 @@ public class WebUI {
 			path="/updateFromBusiness",
 			produces=MediaType.APPLICATION_JSON_VALUE,
 			consumes=MediaType.APPLICATION_JSON_VALUE)
-	public UpdateFromBusinessTO upateFromBusiness (@RequestBody UpdateFromBusinessTO newUpdate, HttpServletRequest request) {
-		
-		System.out.println("\n\n\n upate From Business ************** Remote Address: " + request.getRemoteAddr());
+	public UpdateFromBusinessTO upateFromBusiness (@RequestBody UpdateFromBusinessTO newUpdate) {
+		//HttpServletRequest request
+		//System.out.println("\n\n\n upate From Business ************** Remote Address: " + request.getRemoteAddr());
 		
 		return new UpdateFromBusinessTO(
 				this.business.addNewUpdate(newUpdate.toEntity()));
@@ -169,6 +169,9 @@ public class WebUI {
 	public void addDeafultValues () throws Exception {		
 		this.clientService.addDeafultValues();
 	}
+	
+	
+	
 	
 	@ExceptionHandler//(MessageNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)

@@ -4,10 +4,11 @@ import uncrowd.logic.UpdateFromBusiness;
 
 public class UpdateFromBusinessTO {
 	
+	Long id;
 	Integer numberOFPeople;
 	Integer numberOFPeopleThatEnter;
 	Integer numberOFPeopleThatExit;
-	String[] date;
+	Integer date;
 	String confirmation;
 	
 	public UpdateFromBusinessTO() {
@@ -20,6 +21,27 @@ public class UpdateFromBusinessTO {
 		setNumberOFPeople(updateFromBusinessEntity.getNumberOFPeople());
 		setNumberOFPeopleThatEnter(updateFromBusinessEntity.getNumberOFPeopleThatEnter());
 		setNumberOFPeopleThatExit(updateFromBusinessEntity.getNumberOFPeopleThatExit());
+		setId(updateFromBusinessEntity.getId());
+	}
+
+	public UpdateFromBusiness toEntity()
+	{
+		UpdateFromBusiness rv = new UpdateFromBusiness();
+		rv.setConfirmation(this.confirmation);
+		rv.setDate(this.date);
+		rv.setNumberOFPeople(this.numberOFPeople);
+		rv.setNumberOFPeopleThatEnter(this.numberOFPeopleThatEnter);
+		rv.setNumberOFPeopleThatExit(this.numberOFPeopleThatExit);
+		rv.setId(this.id);
+		return rv;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Integer getNumberOFPeople() {
@@ -45,13 +67,12 @@ public class UpdateFromBusinessTO {
 	public void setNumberOFPeopleThatExit(Integer numberOFPeopleThatExit) {
 		this.numberOFPeopleThatExit = numberOFPeopleThatExit;
 	}
-		
-	
-	public String[] getDate() {
+
+	public Integer getDate() {
 		return date;
 	}
 
-	public void setDate(String[] date) {
+	public void setDate(Integer date) {
 		this.date = date;
 	}
 
@@ -62,18 +83,5 @@ public class UpdateFromBusinessTO {
 	public void setConfirmation(String confirmation) {
 		this.confirmation = confirmation;
 	}
-
-	public UpdateFromBusiness toEntity()
-	{
-		UpdateFromBusiness rv = new UpdateFromBusiness();
-		rv.setConfirmation(this.confirmation);
-		rv.setDate(this.date);
-		rv.setNumberOFPeople(this.numberOFPeople);
-		rv.setNumberOFPeopleThatEnter(this.numberOFPeopleThatEnter);
-		rv.setNumberOFPeopleThatExit(this.numberOFPeopleThatExit);	
-		return rv;
-	}
 	
-	
-
 }
