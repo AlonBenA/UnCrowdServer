@@ -4,10 +4,11 @@ package uncrowd.logic;
 //Not a Table and just for convenience
 public class UpdateFromBusiness {
 	
+	Long id;
 	Integer numberOFPeople;
 	Integer numberOFPeopleThatEnter;
 	Integer numberOFPeopleThatExit;
-	String[] date;
+	Integer date;
 	String confirmation;
 	
 	
@@ -16,6 +17,15 @@ public class UpdateFromBusiness {
 	}
 	
 	
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public Integer getNumberOFPeople() {
 		return numberOFPeople;
 	}
@@ -34,14 +44,14 @@ public class UpdateFromBusiness {
 	public void setNumberOFPeopleThatExit(Integer numberOFPeopleThatExit) {
 		this.numberOFPeopleThatExit = numberOFPeopleThatExit;
 	}
+	
 
-
-	public String[] getDate() {
+	public Integer getDate() {
 		return date;
 	}
 
 
-	public void setDate(String[] date) {
+	public void setDate(Integer date) {
 		this.date = date;
 	}
 

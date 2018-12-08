@@ -54,13 +54,9 @@ public class WebUI {
 			method=RequestMethod.GET,
 			path="/BusinessID",
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public MessageTO getBusinessId (HttpServletRequest request) throws MessageNotFoundException {
+	public BusinessIdTO getBusinessId (HttpServletRequest request) throws MessageNotFoundException {
 		
-		System.out.println("\n\n\n************** Remote Address: " + request.getRemoteAddr());
-		
-		MessageEntity rv = this.messages.getMessage("BusinessID");
-		
-		return new MessageTO(rv);
+		return new BusinessIdTO();
 	}
 	
 	// Local host 
@@ -70,9 +66,9 @@ public class WebUI {
 			path="/updateFromBusiness",
 			produces=MediaType.APPLICATION_JSON_VALUE,
 			consumes=MediaType.APPLICATION_JSON_VALUE)
-	public UpdateFromBusinessTO upateFromBusiness (@RequestBody UpdateFromBusinessTO newUpdate, HttpServletRequest request) {
-		
-		System.out.println("\n\n\n upate From Business ************** Remote Address: " + request.getRemoteAddr());
+	public UpdateFromBusinessTO upateFromBusiness (@RequestBody UpdateFromBusinessTO newUpdate) {
+		//HttpServletRequest request
+		//System.out.println("\n\n\n upate From Business ************** Remote Address: " + request.getRemoteAddr());
 		
 		return new UpdateFromBusinessTO(
 				this.business.addNewUpdate(newUpdate.toEntity()));
@@ -169,6 +165,9 @@ public class WebUI {
 	public void addDeafultValues () throws Exception {		
 		this.clientService.addDeafultValues();
 	}
+	
+	
+	
 	
 	@ExceptionHandler//(MessageNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
