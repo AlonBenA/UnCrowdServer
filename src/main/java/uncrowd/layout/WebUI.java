@@ -119,7 +119,7 @@ public class WebUI {
 	
 	
 	// Local host 
-	//http://localhost:8083/id
+	//http://localhost:8083/Businessinfo/id
 	@RequestMapping(
 			method=RequestMethod.GET,
 			path="/Businessinfo/{id}",
@@ -143,16 +143,16 @@ public class WebUI {
 	}
 
 	// Local host 
-	//http://localhost:8083/AllBusinesses/lat/lon/size/page
+	//http://localhost:8083/AllBusinesses/lat/lon?size=5&page=0
 	@RequestMapping(
 			method=RequestMethod.GET,
-			path="/AllBusinesses",
-			consumes=MediaType.APPLICATION_JSON_VALUE)
+			path="/AllBusinesses/{lat}/{lon}",
+			produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<BusinessTO> getAllBusinesses (@PathVariable("lat") double latitude,
 			@PathVariable("lon") double longitude,
 			@RequestParam(name="size", required=false, defaultValue="30") int size, 
 			@RequestParam(name="page", required=false, defaultValue="0") int page	) throws Exception {
-		
+		System.out.println("getAllBusinesses received : lat = " + latitude + " lon = " + longitude);
 		List<BusinessEntity> entitiesList = this.clientService.getAllBusinesses(longitude, latitude, size, page);
 		
 		List<BusinessTO> businessTO = new ArrayList<>();

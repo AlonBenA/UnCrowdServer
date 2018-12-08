@@ -11,7 +11,7 @@ public class TypeTO {
 		return id;
 	}
 
-	public void setNumberID(long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

@@ -6,7 +6,6 @@ import java.util.List;
 import uncrowd.logic.Entity.AverageEntity;
 import uncrowd.logic.Entity.BusinessEntity;
 import uncrowd.logic.Entity.BusinessTypeEntity;
-import uncrowd.logic.Entity.CrowdHistoryEntity;
 import uncrowd.logic.Entity.LastDayCrowdEntity;
 import uncrowd.logic.Entity.OpeningHoursEntity;
 
@@ -18,31 +17,26 @@ public class BusinessTO {
 	Double lat;
 	Double lon;
 	Integer crowdLevel;
-	Integer numberOfPeople;
-	String[]  numberOfPeopleDate;
-	Integer HowMuchPeopleAreLikelyToBe;
-	String[] HowMuchPeopleAreLikelyToBeDate;
-	List<UpdateFromBusinessTO> lastUpdate;
+	Integer crowdCount;
+	Integer expectedCrowdCount;
+	Integer[] HowMuchPeopleAreLikelyToBeDate;
 	List<AverageTO> averages;
 	List<CrowdHistoryTO> crowdHistory;
-	List<LastDayCrowdTO> lastDayCrowd;
 	List<OpeningHoursTO> openingHours;
 	List<TypeTO> types;
 	
 	public BusinessTO(BusinessEntity businessEntity) {
 		if (businessEntity != null) {
 			//TODO: Handle likely to be
-			HowMuchPeopleAreLikelyToBe = 1;
+			expectedCrowdCount = 30;
 			this.id = businessEntity.getId();
 			this.name = businessEntity.getName();
 			this.address = businessEntity.getAddress();
 			this.lat = businessEntity.getLatitude();
 			this.lon = businessEntity.getLongitude();
 			this.crowdLevel = businessEntity.getCurrCrowdLevel();
-			this.numberOfPeople = businessEntity.getCurrCrowdCount();
-			
-			// TODO: Handle lastUpdate
-			
+			this.crowdCount = businessEntity.getCurrCrowdCount();
+						
 			if(businessEntity.getAverages() != null) {
 				averages = new ArrayList<>();
 				for(AverageEntity averageEntity: businessEntity.getAverages()) {
@@ -52,15 +46,23 @@ public class BusinessTO {
 			
 			if(businessEntity.getCrowdHistory() != null) {
 				crowdHistory = new ArrayList<>();
-				for(CrowdHistoryEntity crowdHistoryEntity: businessEntity.getCrowdHistory()) {
-					crowdHistory.add(new CrowdHistoryTO(crowdHistoryEntity));
-				}
-			}
-			
-			if(businessEntity.getLastDayCrowd() != null) {
-				lastDayCrowd = new ArrayList<>();
-				for(LastDayCrowdEntity lastDayCrowdEntity: businessEntity.getLastDayCrowd()) {
-					lastDayCrowd.add(new LastDayCrowdTO(lastDayCrowdEntity));
+				
+				// Pulling the last few crowd counts from the crowd history
+				List<LastDayCrowdEntity> lastDayCrowdList = businessEntity.getLastDayCrowd();
+				// TODO: Put this 3 in a const
+				List<LastDayCrowdEntity> lastRecords = lastDayCrowdList.subList(lastDayCrowdList.size() - (3 * 3), lastDayCrowdList.size());
+				for(LastDayCrowdEntity lastDayCrowd: lastRecords) {
+					// TODO: Change this 2 to const
+					// Taking only the total count and sending to client 
+					// (in order for it to display current trend graph)
+					if (lastDayCrowd.getType() == 2) {
+						// Converting the LastDay entity to CrowdHistoryTO
+						CrowdHistoryTO currCrowdHistory = new CrowdHistoryTO();
+						currCrowdHistory.setBusinessId(id);
+						currCrowdHistory.setCrowdCount(lastDayCrowd.getCount());
+						currCrowdHistory.setDateTime(lastDayCrowd.getTimeId());
+						crowdHistory.add(currCrowdHistory);
+					}
 				}
 			}
 			
@@ -76,6 +78,8 @@ public class BusinessTO {
 				for(OpeningHoursEntity openingHoursEntity: businessEntity.getOpeningHours()) {
 					openingHours.add(new OpeningHoursTO(openingHoursEntity));
 				}
+				// Sorting the hours by day
+				openingHours.sort(null);
 			}
 		}
 	}
@@ -144,44 +148,28 @@ public class BusinessTO {
 		this.crowdLevel = crowdLevel;
 	}
 
-	public int getNumberOfPeople() {
-		return numberOfPeople;
+	public Integer getCrowdCount() {
+		return crowdCount;
 	}
 
-	public void setNumberOfPeople(int numberOfPeople) {
-		this.numberOfPeople = numberOfPeople;
+	public void setCrowdCount(Integer crowdCount) {
+		this.crowdCount = crowdCount;
 	}
 
-	public String[] getNumberOfPeopleDate() {
-		return numberOfPeopleDate;
+	public Integer getExpectedCrowdCount() {
+		return expectedCrowdCount;
 	}
 
-	public void setNumberOfPeopleDate(String[] numberOfPeopleDate) {
-		this.numberOfPeopleDate = numberOfPeopleDate;
+	public void setExpectedCrowdCount(Integer expectedCrowdCount) {
+		this.expectedCrowdCount = expectedCrowdCount;
 	}
 
-	public int getHowMuchPeopleAreLikelyToBe() {
-		return HowMuchPeopleAreLikelyToBe;
-	}
-
-	public void setHowMuchPeopleAreLikelyToBe(int howMuchPeopleAreLikelyToBe) {
-		HowMuchPeopleAreLikelyToBe = howMuchPeopleAreLikelyToBe;
-	}
-
-	public String[] getHowMuchPeopleAreLikelyToBeDate() {
+	public Integer[] getHowMuchPeopleAreLikelyToBeDate() {
 		return HowMuchPeopleAreLikelyToBeDate;
 	}
 
-	public void setHowMuchPeopleAreLikelyToBeDate(String[] howMuchPeopleAreLikelyToBeDate) {
+	public void setHowMuchPeopleAreLikelyToBeDate(Integer[] howMuchPeopleAreLikelyToBeDate) {
 		HowMuchPeopleAreLikelyToBeDate = howMuchPeopleAreLikelyToBeDate;
-	}
-
-	public List<UpdateFromBusinessTO> getLastUpdate() {
-		return lastUpdate;
-	}
-
-	public void setLastUpdate(List<UpdateFromBusinessTO> lastUpdate) {
-		this.lastUpdate = lastUpdate;
 	}
 
 	public List<AverageTO> getAverages() {
@@ -191,7 +179,12 @@ public class BusinessTO {
 	public void setAverages(List<AverageTO> averages) {
 		this.averages = averages;
 	}
-	
-	
-	
+
+	public List<CrowdHistoryTO> getCrowdHistory() {
+		return crowdHistory;
+	}
+
+	public void setCrowdHistory(List<CrowdHistoryTO> crowdHistory) {
+		this.crowdHistory = crowdHistory;
+	}
 }

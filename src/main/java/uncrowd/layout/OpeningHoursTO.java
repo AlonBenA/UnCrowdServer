@@ -2,7 +2,7 @@ package uncrowd.layout;
 
 import uncrowd.logic.Entity.OpeningHoursEntity;
 
-public class OpeningHoursTO {
+public class OpeningHoursTO implements Comparable<OpeningHoursTO>{
 	Long id;
 	Integer day;
 	Integer open;
@@ -59,6 +59,11 @@ public class OpeningHoursTO {
 			this.close = entity.getCloseHour();
 			this.businessId = entity.getBusiness().getId();
 		}
+	}
+
+	@Override
+	public int compareTo(OpeningHoursTO o) {
+		return this.day.compareTo(day);
 	}
     
 }

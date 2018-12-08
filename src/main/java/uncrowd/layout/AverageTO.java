@@ -2,7 +2,7 @@ package uncrowd.layout;
 
 import uncrowd.logic.Entity.AverageEntity;
 
-public class AverageTO {
+public class AverageTO implements Comparable<AverageTO>{
 	
 	Integer Day;
 	Integer dateTime;
@@ -25,7 +25,7 @@ public class AverageTO {
 		this.dateTime = dateTime;
 	}
 
-	public double getAverage() {
+	public int getAverage() {
 		return Average;
 	}
 
@@ -50,6 +50,17 @@ public class AverageTO {
 			this.Average = entity.getAverage();
 			this.businessId = entity.getBusiness().getId();
 		}
+	}
+
+	@Override
+	public int compareTo(AverageTO o) {
+		int dayCompareTo = this.Day.compareTo(o.Day);
+		int dateTimeCompareTo = this.dateTime.compareTo(o.dateTime);
+		if(dayCompareTo == 0) {
+			return dateTimeCompareTo; 
+		}
+		
+		return dayCompareTo;
 	}
 
 }

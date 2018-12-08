@@ -103,96 +103,55 @@ public class jpaClientService implements ClientService {
 
 	@Override
 	public void addDeafultValues() {
-		BusinessTypeEntity type = new BusinessTypeEntity();
-		type.setName("type2");
-		BusinessTypeEntity type2 = new BusinessTypeEntity();
-		type2.setName("type3");
 		
 		List<BusinessTypeEntity> types = new ArrayList<>();
-		types.add(type);
-		types.add(type2);
-		
-		this.businessTypes.save(type);
-		this.businessTypes.save(type2);
-		 
-		
-		AverageEntity a = new AverageEntity();
-		a.setAverage(10);
-		a.setDateTime(1700);
-		a.setDay(2);
-		
-		
-		AverageEntity a2 = new AverageEntity();
-		a2.setAverage(12);
-		a2.setDateTime(1600);
-		a2.setDay(2);
+		types(types);
 		
 		List<AverageEntity> averages = new ArrayList<>();
-		averages.add(a);
-		averages.add(a2);
-		
-		
-		LastDayCrowdEntity ldc = new LastDayCrowdEntity();
-		ldc.setCount(15);
-		ldc.setTimeId(1000);
-		ldc.setType(0);
-		
-		LastDayCrowdEntity ldc2 = new LastDayCrowdEntity();
-		ldc2.setCount(32);
-		ldc2.setTimeId(1100);
-		ldc2.setType(1);
+		averages(averages);
 		
 		List<LastDayCrowdEntity> lastDayCrowd = new ArrayList<>();
-		lastDayCrowd.add(ldc);
-		lastDayCrowd.add(ldc2);
+		lastDayCrowd(lastDayCrowd);
 		
-		
-		
-		OpeningHoursEntity oh = new OpeningHoursEntity();
-		oh.setCloseHour(1600);
-		oh.setDay(2);
-		oh.setOpenHour(1000);
-		
-		OpeningHoursEntity oh2 = new OpeningHoursEntity();
-		oh2.setCloseHour(1700);
-		oh2.setDay(3);
-		oh2.setOpenHour(1100);
 		
 		List<OpeningHoursEntity> openingHours = new ArrayList<>();
-		openingHours.add(oh);
-		openingHours.add(oh2);
+		openingHours(openingHours);
 
 		
-		CrowdHistoryEntity ch = new CrowdHistoryEntity();
-		ch.setCrowdCount(12);
-		ch.setDateTime(1000);
-		ch.setDay(1);
-		
-		CrowdHistoryEntity ch2 = new CrowdHistoryEntity();
-		ch2.setCrowdCount(22);
-		ch2.setDateTime(1100);
-		ch2.setDay(3);
-		
 		List<CrowdHistoryEntity> crowdHistory = new ArrayList<>();
-		crowdHistory.add(ch);
-		crowdHistory.add(ch2);
-		
+		crowdHistory(crowdHistory);
 		
 		
 		BusinessEntity b = new BusinessEntity();
-		b.setAddress("Address");
-		b.setLatitude(32.222);
-		b.setLongitude(30.222);
-		b.setCurrCrowdCount(5);
-		b.setCurrCrowdLevel(5);
-		b.setName("AA");
+		b.setAddress("Sheshet Hayamim 200, Bnei Brak");
+		b.setLatitude(32.114825);
+		b.setLongitude(34.816782);
+		b.setCurrCrowdCount(20);
+		b.setCurrCrowdLevel(4);
+		b.setName("Toys R Us");
 		b.setTypes(types);
 		b.setAverages(averages);
 		b.setLastDayCrowd(lastDayCrowd);
 		b.setOpeningHours(openingHours);
 		b.setCrowdHistory(crowdHistory);
 		
-		ch.setBusiness(b);
+		for(AverageEntity avg : averages) {
+			avg.setBusiness(b);
+		}
+		
+		for(LastDayCrowdEntity ldc : lastDayCrowd) {
+			ldc.setBusiness(b);
+		}
+		
+		for(OpeningHoursEntity oh : openingHours) {
+			oh.setBusiness(b);
+		}
+		
+		for(CrowdHistoryEntity ch : crowdHistory) {
+			ch.setBusiness(b);
+		}
+		
+		/*ch.setBusiness(b);
 		ch2.setBusiness(b);
 		
 		oh.setBusiness(b);
@@ -202,10 +161,175 @@ public class jpaClientService implements ClientService {
 		ldc2.setBusiness(b);
 		
 		a.setBusiness(b);
-		a2.setBusiness(b);
+		a2.setBusiness(b);*/
 		
-		businesses.save(b);
+		businesses.save(b);	
+	}
+
+	private void types(List<BusinessTypeEntity> types) {
+		BusinessTypeEntity type = new BusinessTypeEntity();
+		type.setName("type2");
+		types.add(type);
+		this.businessTypes.save(type);
+		
+		type = new BusinessTypeEntity();
+		type.setName("type3");
+		types.add(type);
+		this.businessTypes.save(type);
+	}
+	
+	private void averages(List<AverageEntity> averages) {
+		AverageEntity a;
+		
+		for(int i = 0 ; i < 7; i ++) {
+            for(int j = 0 ; j < 24; j ++){
+            	a = new AverageEntity();
+            	a.setAverage((int)Math.round(Math.random() * 100.0));
+            	a.setDay(i);
+            	a.setDateTime(j * 100);
+                averages.add(a);
+            }
+        }
+	}
+	
+	private void crowdHistory(List<CrowdHistoryEntity> crowdHistory) {
+		CrowdHistoryEntity ch = new CrowdHistoryEntity();
+		ch.setCrowdCount(12);
+		ch.setDateTime(1000);
+		ch.setDay(1);
+		crowdHistory.add(ch);
+		
+		ch = new CrowdHistoryEntity();
+		ch.setCrowdCount(22);
+		ch.setDateTime(1100);
+		ch.setDay(3);
+		crowdHistory.add(ch);
+	}
+	
+	private void lastDayCrowd(List<LastDayCrowdEntity> lastDayCrowd) {
+		
+		LastDayCrowdEntity ldc = new LastDayCrowdEntity();
+		ldc.setCount(15);
+		ldc.setTimeId(1000);
+		ldc.setType(0);
+		lastDayCrowd.add(ldc);
+		
+		ldc = new LastDayCrowdEntity();
+		ldc.setCount(32);
+		ldc.setTimeId(1000);
+		ldc.setType(1);
+		lastDayCrowd.add(ldc);
+		
+		ldc = new LastDayCrowdEntity();
+		ldc.setCount(0);
+		ldc.setTimeId(1000);
+		ldc.setType(2);
+		lastDayCrowd.add(ldc);
 		
 		
+		
+		
+		ldc = new LastDayCrowdEntity();
+		ldc.setCount(15);
+		ldc.setTimeId(1100);
+		ldc.setType(0);
+		lastDayCrowd.add(ldc);
+		
+		ldc = new LastDayCrowdEntity();
+		ldc.setCount(32);
+		ldc.setTimeId(1100);
+		ldc.setType(1);
+		lastDayCrowd.add(ldc);
+		
+		ldc = new LastDayCrowdEntity();
+		ldc.setCount(1);
+		ldc.setTimeId(1100);
+		ldc.setType(2);
+		lastDayCrowd.add(ldc);
+		
+		
+		
+		
+		ldc = new LastDayCrowdEntity();
+		ldc.setCount(15);
+		ldc.setTimeId(1200);
+		ldc.setType(0);
+		lastDayCrowd.add(ldc);
+		
+		ldc = new LastDayCrowdEntity();
+		ldc.setCount(32);
+		ldc.setTimeId(1200);
+		ldc.setType(1);
+		lastDayCrowd.add(ldc);
+		
+		ldc = new LastDayCrowdEntity();
+		ldc.setCount(4);
+		ldc.setTimeId(1200);
+		ldc.setType(2);
+		lastDayCrowd.add(ldc);
+		
+		
+		
+		ldc = new LastDayCrowdEntity();
+		ldc.setCount(15);
+		ldc.setTimeId(1300);
+		ldc.setType(0);
+		lastDayCrowd.add(ldc);
+		
+		ldc = new LastDayCrowdEntity();
+		ldc.setCount(32);
+		ldc.setTimeId(1300);
+		ldc.setType(1);
+		lastDayCrowd.add(ldc);
+		
+		ldc = new LastDayCrowdEntity();
+		ldc.setCount(5);
+		ldc.setTimeId(1300);
+		ldc.setType(2);
+		lastDayCrowd.add(ldc);
+	}
+	
+	private void openingHours(List<OpeningHoursEntity> openingHours) {
+		OpeningHoursEntity oh = new OpeningHoursEntity();
+		oh.setDay(0);
+		oh.setOpenHour(1100);
+		oh.setCloseHour(1700);
+		openingHours.add(oh);
+		
+		oh = new OpeningHoursEntity();
+		oh.setDay(1);
+		oh.setOpenHour(1000);
+		oh.setCloseHour(1700);
+		openingHours.add(oh);
+		
+		oh = new OpeningHoursEntity();
+		oh.setDay(2);
+		oh.setOpenHour(900);
+		oh.setCloseHour(1700);
+		openingHours.add(oh);
+		
+		oh = new OpeningHoursEntity();
+		oh.setDay(3);
+		oh.setOpenHour(800);
+		oh.setCloseHour(1700);
+		openingHours.add(oh);
+		
+		oh = new OpeningHoursEntity();
+		oh.setDay(4);
+		oh.setOpenHour(700);
+		oh.setCloseHour(1700);
+		openingHours.add(oh);
+		
+		oh = new OpeningHoursEntity();
+		oh.setDay(5);
+		oh.setOpenHour(600);
+		oh.setCloseHour(1700);
+		openingHours.add(oh);
+		
+		oh = new OpeningHoursEntity();
+		oh.setDay(6);
+		oh.setOpenHour(500);
+		oh.setCloseHour(1700);
+		openingHours.add(oh);
 	}
 }
