@@ -23,25 +23,20 @@ import uncrowd.logic.BusinessService;
 import uncrowd.logic.ClientService;
 import uncrowd.logic.MessageAlreadyExistsException;
 import uncrowd.logic.MessageNotFoundException;
-import uncrowd.logic.MessageService;
 import uncrowd.logic.Entity.BusinessEntity;
 import uncrowd.logic.Entity.BusinessTypeEntity;
-import uncrowd.logic.Entity.MessageEntity;
 
 @RestController
 public class WebUI {
-	private MessageService messages;
 	private BusinessService business;
 	private ClientService clientService;
 	
 	
 	@Autowired
-	public void setMessages(MessageService messages,BusinessService business, ClientService clientService) {
-		this.messages = messages;
+	public void setMessages(BusinessService business, ClientService clientService) {
 		this.business = business;
 		this.clientService = clientService;
 	}
-	
 	
     @RequestMapping("/hello/{name}")
     String hello(@PathVariable String name) {
@@ -78,23 +73,32 @@ public class WebUI {
 	//http://localhost:8083/BusinessWithParameters/name/types/100/5/6
 	@RequestMapping(
 			method=RequestMethod.GET,
-			path="/BusinessWithParameters/{name}/{types}/{distance}/{lat}/{lon}",
+			path="/BusinessWithParameters/{name}/{distance}/{lat}/{lon}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public MessageTO getBusinessWithParameters (@PathVariable("name") String name,
-			@PathVariable("types") String types,
-			@PathVariable("distance") String distance,
+	public List<BusinessTO> getBusinessWithParameters (@PathVariable("name") String name,
+			@PathVariable("distance") Integer distance,
 			@PathVariable("lat") double lat,
 			@PathVariable("lon") double lon,
+			@RequestParam(name="types", required=false, defaultValue="") String types,
 			@RequestParam(name="size", required=false, defaultValue="30") int size, 
 			@RequestParam(name="page", required=false, defaultValue="0") int page	) throws MessageNotFoundException {
 		
+		List<Long> typesIds = new ArrayList<>();
 		
-		MessageEntity rv = this.messages.getMessage(name+types+distance+lat+lon+size);
+		// Checking there are types to filter
+		if(!types.equals("")) {
+			String[] typesIdsString = types.split(",");
+			for(String id : typesIdsString) {
+				try {
+					typesIds.add(Long.parseLong(id));
+				}catch(Exception ex) {
+					System.err.println("RECEIVED WRONG TYPE ID, NOT A LONG!");
+				}
+			}
+		}
 		
-		return new MessageTO(rv);
+		return convertBusinessEntityToTO(clientService.getBusinessesFiltered(lon, lat, name, typesIds, distance, size, page));
 	}
-	
-	
 	
 	// Local host 
 	//http://localhost:8083/AllBusinessTypes
@@ -104,10 +108,11 @@ public class WebUI {
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<TypeTO> getAllBusinessTypes () throws MessageNotFoundException {
 		
+		// Getting the types from the client service
 		List<BusinessTypeEntity> rv = this.clientService.getBusinessesTypes();
 
-		List<TypeTO> typesTO = new ArrayList<>();
-		
+		// Converting to TO objects:
+		List<TypeTO> typesTO = new ArrayList<>();		
 		rv.forEach(entity-> typesTO.add(new TypeTO(entity)));
 		
 		return typesTO;
@@ -135,7 +140,7 @@ public class WebUI {
 		
 		System.out.println("\n\n time to update \n\n");
 		
-		this.messages.updateMessage("time to update", updatedMessage.toEntity());
+		// TODO: Update...
 	}
 
 	// Local host 
@@ -149,12 +154,7 @@ public class WebUI {
 			@RequestParam(name="size", required=false, defaultValue="30") int size, 
 			@RequestParam(name="page", required=false, defaultValue="0") int page	) throws Exception {
 		System.out.println("getAllBusinesses received : lat = " + latitude + " lon = " + longitude);
-		List<BusinessEntity> entitiesList = this.clientService.getAllBusinesses(longitude, latitude, size, page);
-		
-		List<BusinessTO> businessTO = new ArrayList<>();
-		entitiesList.forEach(entity-> businessTO.add(new BusinessTO(entity)));
-		
-		return businessTO;
+		return convertBusinessEntityToTO(this.clientService.getAllBusinesses(longitude, latitude, size, page));
 	}
 	
 	// Local host 
@@ -165,9 +165,6 @@ public class WebUI {
 	public void addDeafultValues () throws Exception {		
 		this.clientService.addDeafultValues();
 	}
-	
-	
-	
 	
 	@ExceptionHandler//(MessageNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
@@ -187,6 +184,13 @@ public class WebUI {
 			message = "There is no relevant message";
 		}
 		return new ErrorMessage(message);
+	}
+	
+	private List<BusinessTO> convertBusinessEntityToTO(List<BusinessEntity> entitiesList){
+		List<BusinessTO> businessTO = new ArrayList<>();
+		entitiesList.forEach(entity-> businessTO.add(new BusinessTO(entity)));
+		
+		return businessTO;
 	}
 	
 }

@@ -24,13 +24,21 @@ public class BusinessEntity {
 	Double Longitude;
 	Integer currCrowdCount;
 	Integer currCrowdLevel;
+	// The expected costumers count at the next time unit
+	// (Calculated via machine learning algorithm)
+	Integer expectedCrowdCount;
+	// The time the current expected count is for
+	Integer expectedCountTime;
+	// Indicating if we need to calculate the expected count cause there was an actual count update
+	Boolean needsExpectedCountUpdate;
 	List<AverageEntity> averages;
 	List<CrowdHistoryEntity> crowdHistory;
 	List<LastDayCrowdEntity> lastDayCrowd;
 	List<OpeningHoursEntity> openingHours;
 	List<BusinessTypeEntity> types;
 	
-    @ManyToMany
+	
+	@ManyToMany
     @JoinTable(name = "business_to_business_type",
     joinColumns = { @JoinColumn(name = "business_id") },
     inverseJoinColumns = { @JoinColumn(name = "business_type_id") })
@@ -86,8 +94,26 @@ public class BusinessEntity {
 	public void setCurrCrowdLevel(Integer currCrowdLevel) {
 		this.currCrowdLevel = currCrowdLevel;
 	}
+    public Integer getExpectedCrowdCount() {
+		return expectedCrowdCount;
+	}
+	public void setExpectedCrowdCount(Integer expectedCrowdCount) {
+		this.expectedCrowdCount = expectedCrowdCount;
+	}
+	public Integer getExpectedCountTime() {
+		return expectedCountTime;
+	}
+	public void setExpectedCountTime(Integer expectedCountTime) {
+		this.expectedCountTime = expectedCountTime;
+	}
+	public Boolean getNeedsExpectedCountUpdate() {
+		return needsExpectedCountUpdate;
+	}
+	public void setNeedsExpectedCountUpdate(Boolean needsExpectedCountUpdate) {
+		this.needsExpectedCountUpdate = needsExpectedCountUpdate;
+	}
 	
-    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
     public List<AverageEntity> getAverages() {
         return averages;
     }
@@ -123,11 +149,7 @@ public class BusinessEntity {
         this.openingHours = openingHours;
     }
     
-    
-    
-	public BusinessEntity(){
-		
-	}
+	public BusinessEntity(){}
 	
 	@Override
 	public boolean equals(Object obj) {

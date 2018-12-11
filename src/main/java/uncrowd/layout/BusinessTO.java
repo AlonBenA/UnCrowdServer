@@ -18,8 +18,11 @@ public class BusinessTO {
 	Double lon;
 	Integer crowdLevel;
 	Integer crowdCount;
+	// The expected costumers count at the next time unit
+	// (Calculated via machine learning algorithm)
 	Integer expectedCrowdCount;
-	Integer[] HowMuchPeopleAreLikelyToBeDate;
+	// The time the current expected count is for
+	Integer expectedCountTime;
 	List<AverageTO> averages;
 	List<CrowdHistoryTO> crowdHistory;
 	List<OpeningHoursTO> openingHours;
@@ -27,8 +30,8 @@ public class BusinessTO {
 	
 	public BusinessTO(BusinessEntity businessEntity) {
 		if (businessEntity != null) {
-			//TODO: Handle likely to be
-			expectedCrowdCount = 30;
+			this.expectedCrowdCount = businessEntity.getExpectedCrowdCount();
+			this.expectedCountTime = businessEntity.getExpectedCountTime();
 			this.id = businessEntity.getId();
 			this.name = businessEntity.getName();
 			this.address = businessEntity.getAddress();
@@ -36,7 +39,7 @@ public class BusinessTO {
 			this.lon = businessEntity.getLongitude();
 			this.crowdLevel = businessEntity.getCurrCrowdLevel();
 			this.crowdCount = businessEntity.getCurrCrowdCount();
-						
+			
 			if(businessEntity.getAverages() != null) {
 				averages = new ArrayList<>();
 				for(AverageEntity averageEntity: businessEntity.getAverages()) {
@@ -163,13 +166,13 @@ public class BusinessTO {
 	public void setExpectedCrowdCount(Integer expectedCrowdCount) {
 		this.expectedCrowdCount = expectedCrowdCount;
 	}
-
-	public Integer[] getHowMuchPeopleAreLikelyToBeDate() {
-		return HowMuchPeopleAreLikelyToBeDate;
+	
+	public Integer getExpectedCountTime() {
+		return expectedCountTime;
 	}
 
-	public void setHowMuchPeopleAreLikelyToBeDate(Integer[] howMuchPeopleAreLikelyToBeDate) {
-		HowMuchPeopleAreLikelyToBeDate = howMuchPeopleAreLikelyToBeDate;
+	public void setExpectedCountTime(Integer expectedCountTime) {
+		this.expectedCountTime = expectedCountTime;
 	}
 
 	public List<AverageTO> getAverages() {

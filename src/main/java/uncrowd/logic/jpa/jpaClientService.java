@@ -60,22 +60,63 @@ public class jpaClientService implements ClientService {
 	@Override
 	public List<BusinessEntity> getBusinessesFiltered(double clientLongitude, double clientLatitude, String name,
 			List<Long> businessesTypes, int radius, int size, int page) {
+		
+		System.out.println("*******getBusinessesFiltered: \nclientLongitude = " + clientLongitude + 
+				"\nclientLatitude = " + clientLatitude + 
+				"\nname = " + name + 
+				"\nradius = " + radius);
 		List<BusinessEntity> allList = new ArrayList<>();
 		
 		this.businesses.findAll()
 			.forEach(allList::add);
 		
+		List<BusinessEntity> matchingList = new ArrayList<>();
 		
-		/*.stream() // stream of entities
-		.filter(ent->ent.getMoreAttributes().get("abc") != null)
-		.filter(ent->(int)ent.getMoreAttributes().get("abc") > value)
-		.skip(size*page)
-		.limit(size)
-		.collect(Collectors.toList());*/
+		for(BusinessEntity bus: allList){
+			// Checking if the current business belongs to one of the types given:
+			boolean doesTypeMatch = false;
+			if(!businessesTypes.isEmpty()) {
+				for(BusinessTypeEntity type : bus.getTypes() ) {
+					if(businessesTypes.contains(type.getId())) {
+						System.out.println("Found type: " + type.getName());
+						doesTypeMatch = true;
+						break;
+					}
+				}
+			}else {
+				// No types to filter,
+				// moving on no meter what
+				doesTypeMatch = true;
+			}
+			
+			// Only if there is a matching type
+			if(doesTypeMatch) {
+				// Checking if the name also is in the given one
+				if(name == null || name.equals("") || 
+						bus.getName().toLowerCase().contains(name.toLowerCase())) {
+					
+					System.out.println("Name fits: " + bus.getName());
+					
+					// Calculating the distance between the client's current location and the buisiness's location
+					// (ignoring altitude)
+					double distanceFromBusiness = Math.abs(LocationHelpers.distance(clientLatitude, 
+							bus.getLatitude(), 
+							clientLongitude, 
+							bus.getLongitude(), 
+							0, 0));
+					
+					System.out.println("Distance is: " + distanceFromBusiness);
+					
+					// Checking if the distance between the business and the user is smaller than the radius given
+					// (radius unit is KM and distance is M, hence the conversion)
+					if(radius <= 0 || distanceFromBusiness <= radius * 1000) {
+						matchingList.add(bus);
+					}
+				}
+			}
+		}
 		
-		//allList.stream().filter(bus -> bus.getName().toLowerCase().contains(name.toLowerCase()))
-		//.filter(predicate)
-		return null;
+		return matchingList;
 	}
 
 	@Override

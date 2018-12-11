@@ -49,6 +49,11 @@ public class BusinessTypeEntity {
 		this.name = name;
 	}
 	
-		
-
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof BusinessTypeEntity) {
+			return this.id == ((BusinessTypeEntity)obj).id;
+		}
+		return false;
+	}
 }
