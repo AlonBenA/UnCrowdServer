@@ -18,6 +18,7 @@ public class JpaBusinessService implements BusinessService {
 	private LastDayCrowdDao lastDayCrowdTable;
 	private BusinessDao BusinessTable;
 	private NumbersDao numbers;
+	private static final Integer NUMBEROFPEPOLE = 2;
 	private static final Integer ENTER = 1;
 	private static final Integer EXIT = 0;
 	
@@ -48,9 +49,14 @@ public class JpaBusinessService implements BusinessService {
 				timeId,
 				Business);
 		
+		LastDayCrowdEntity numberOfpeople = new LastDayCrowdEntity(newUpdate.getId(),NUMBEROFPEPOLE,
+				newUpdate.getNumberOFPeople(),	
+				timeId,
+				Business);
+		
 		Business.setCurrCrowdCount(newUpdate.getNumberOFPeople());
 		
-		
+		lastDayCrowdTable.save(numberOfpeople);
 		lastDayCrowdTable.save(enter);
 		lastDayCrowdTable.save(exit);
 		BusinessTable.save(Business);
