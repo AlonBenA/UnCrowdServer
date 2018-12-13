@@ -19,6 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import uncrowd.layout.ToClasses.BusinessIdTO;
+import uncrowd.layout.ToClasses.BusinessTO;
+import uncrowd.layout.ToClasses.MessageTO;
+import uncrowd.layout.ToClasses.TypeTO;
+import uncrowd.layout.ToClasses.UpdateFromBusinessTO;
 import uncrowd.logic.BusinessService;
 import uncrowd.logic.ClientService;
 import uncrowd.logic.MessageAlreadyExistsException;
@@ -28,13 +33,11 @@ import uncrowd.logic.Entity.BusinessTypeEntity;
 
 @RestController
 public class WebUI {
-	private BusinessService business;
 	private ClientService clientService;
 	
 	
 	@Autowired
-	public void setMessages(BusinessService business, ClientService clientService) {
-		this.business = business;
+	public void setMessages(ClientService clientService) {
 		this.clientService = clientService;
 	}
 	
@@ -42,32 +45,6 @@ public class WebUI {
     String hello(@PathVariable String name) {
         return "Hello, " + name + "!";
     }
-	
-	// Local host 
-	//http://localhost:8083/BusinessID
-	@RequestMapping(
-			method=RequestMethod.GET,
-			path="/BusinessID",
-			produces=MediaType.APPLICATION_JSON_VALUE)
-	public BusinessIdTO getBusinessId (HttpServletRequest request) throws MessageNotFoundException {
-		
-		return new BusinessIdTO();
-	}
-	
-	// Local host 
-	//http://localhost:8083/upateFromBusiness
-	@RequestMapping(
-			method=RequestMethod.POST,
-			path="/updateFromBusiness",
-			produces=MediaType.APPLICATION_JSON_VALUE,
-			consumes=MediaType.APPLICATION_JSON_VALUE)
-	public UpdateFromBusinessTO upateFromBusiness (@RequestBody UpdateFromBusinessTO newUpdate) {
-		//HttpServletRequest request
-		//System.out.println("\n\n\n upate From Business ************** Remote Address: " + request.getRemoteAddr());
-		
-		return new UpdateFromBusinessTO(
-				this.business.addNewUpdate(newUpdate.toEntity()));
-	}
 	
 	// Local host 
 	//http://localhost:8083/BusinessWithParameters/name/types/100/5/6
