@@ -1,11 +1,17 @@
 package uncrowd.layout.ToClasses;
 
+import uncrowd.logic.BusinessId;
+
 public class BusinessIdTO {
 	
 	long id;
 	
 	public BusinessIdTO() {
 		id = 3;
+	}
+	
+	public BusinessIdTO(BusinessId BusinessId) {
+		id = BusinessId.getId();
 	}
 
 	public long getId() {
@@ -16,8 +22,15 @@ public class BusinessIdTO {
 		this.id = id;
 	}
 	
-	
-	
+	public BusinessId toBusinessId(String ip)
+	{
+		BusinessId BusinessId = new BusinessId();
+		
+		BusinessId.setId(this.id);
+		BusinessId.setIp(ip);
+		
+		return BusinessId;
+	}
 	
 
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import uncrowd.layout.ToClasses.BusinessIdTO;
 import uncrowd.layout.ToClasses.UpdateFromBusinessTO;
+import uncrowd.logic.BusinessId;
 import uncrowd.logic.BusinessService;
 import uncrowd.logic.MessageNotFoundException;
 
@@ -34,7 +35,11 @@ public class BusinessWebUI {
 				produces=MediaType.APPLICATION_JSON_VALUE)
 		public BusinessIdTO getBusinessId (HttpServletRequest request) throws MessageNotFoundException {
 			
-			return new BusinessIdTO();
+			BusinessId businessId = new BusinessId();
+			businessId.setIp(request.getRemoteAddr());
+			businessId = this.business.getBusinessId(businessId);
+			
+			return new BusinessIdTO(businessId);
 		}
 		
 		// Local host 
