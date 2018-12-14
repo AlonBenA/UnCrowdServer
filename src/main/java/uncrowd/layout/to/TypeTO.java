@@ -1,6 +1,6 @@
-package uncrowd.layout.ToClasses;
+package uncrowd.layout.to;
 
-import uncrowd.logic.Entity.BusinessTypeEntity;
+import uncrowd.logic.entity.BusinessTypeEntity;
 
 public class TypeTO {
 	

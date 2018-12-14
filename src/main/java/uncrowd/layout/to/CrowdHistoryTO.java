@@ -1,6 +1,6 @@
-package uncrowd.layout.ToClasses;
+package uncrowd.layout.to;
 
-import uncrowd.logic.Entity.CrowdHistoryEntity;
+import uncrowd.logic.entity.CrowdHistoryEntity;
 
 public class CrowdHistoryTO {
 	Long id;

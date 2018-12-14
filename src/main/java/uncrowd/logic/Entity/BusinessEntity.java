@@ -1,4 +1,4 @@
-package uncrowd.logic.Entity;
+package uncrowd.logic.entity;
 
 import java.util.List;
 

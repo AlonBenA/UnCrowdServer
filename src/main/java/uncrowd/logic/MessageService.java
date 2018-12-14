@@ -2,7 +2,7 @@ package uncrowd.logic;
 
 import java.util.List;
 
-import uncrowd.logic.Entity.MessageEntity;
+import uncrowd.logic.entity.MessageEntity;
 
 public interface MessageService {
 

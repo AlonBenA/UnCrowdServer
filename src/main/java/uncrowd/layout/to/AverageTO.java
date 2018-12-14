@@ -1,6 +1,6 @@
-package uncrowd.layout.ToClasses;
+package uncrowd.layout.to;
 
-import uncrowd.logic.Entity.AverageEntity;
+import uncrowd.logic.entity.AverageEntity;
 
 public class AverageTO implements Comparable<AverageTO>{
 	

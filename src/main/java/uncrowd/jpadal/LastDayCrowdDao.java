@@ -2,7 +2,7 @@ package uncrowd.jpadal;
 
 import org.springframework.data.repository.CrudRepository;
 
-import uncrowd.logic.Entity.LastDayCrowdEntity;
+import uncrowd.logic.entity.LastDayCrowdEntity;
 
 public interface LastDayCrowdDao extends CrudRepository<LastDayCrowdEntity, Long>  {
 	

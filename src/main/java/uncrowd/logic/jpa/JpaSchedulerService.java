@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import uncrowd.jpadal.BusinessDao;
 import uncrowd.logic.SchedualerService;
-import uncrowd.logic.Entity.BusinessEntity;
+import uncrowd.logic.entity.BusinessEntity;
 
 public class JpaSchedulerService implements SchedualerService{
 

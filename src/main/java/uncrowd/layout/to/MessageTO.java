@@ -1,11 +1,11 @@
-package uncrowd.layout.ToClasses;
+package uncrowd.layout.to;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import uncrowd.logic.Location;
-import uncrowd.logic.Entity.MessageEntity;
+import uncrowd.logic.entity.MessageEntity;
 
 public class MessageTO {
 	private String message;

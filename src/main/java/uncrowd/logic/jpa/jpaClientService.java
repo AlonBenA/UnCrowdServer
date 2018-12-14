@@ -14,12 +14,12 @@ import uncrowd.jpadal.LastDayCrowdDao;
 
 import uncrowd.jpadal.OpeningHoursDao;
 import uncrowd.logic.ClientService;
-import uncrowd.logic.Entity.AverageEntity;
-import uncrowd.logic.Entity.BusinessEntity;
-import uncrowd.logic.Entity.BusinessTypeEntity;
-import uncrowd.logic.Entity.CrowdHistoryEntity;
-import uncrowd.logic.Entity.LastDayCrowdEntity;
-import uncrowd.logic.Entity.OpeningHoursEntity;
+import uncrowd.logic.entity.AverageEntity;
+import uncrowd.logic.entity.BusinessEntity;
+import uncrowd.logic.entity.BusinessTypeEntity;
+import uncrowd.logic.entity.CrowdHistoryEntity;
+import uncrowd.logic.entity.LastDayCrowdEntity;
+import uncrowd.logic.entity.OpeningHoursEntity;
 
 @Service
 public class jpaClientService implements ClientService {

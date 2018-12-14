@@ -1,4 +1,4 @@
-package uncrowd.logic.Entity;
+package uncrowd.logic.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

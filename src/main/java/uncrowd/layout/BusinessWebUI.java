@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import uncrowd.layout.ToClasses.BusinessIdTO;
-import uncrowd.layout.ToClasses.UpdateFromBusinessTO;
+import uncrowd.layout.to.BusinessIdTO;
+import uncrowd.layout.to.UpdateFromBusinessTO;
 import uncrowd.logic.BusinessId;
 import uncrowd.logic.BusinessService;
 import uncrowd.logic.MessageNotFoundException;

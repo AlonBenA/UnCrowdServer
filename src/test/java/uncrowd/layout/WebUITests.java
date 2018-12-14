@@ -22,10 +22,10 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import uncrowd.layout.ToClasses.MessageTO;
+import uncrowd.layout.to.MessageTO;
 import uncrowd.logic.Location;
 import uncrowd.logic.MessageService;
-import uncrowd.logic.Entity.MessageEntity;
+import uncrowd.logic.entity.MessageEntity;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)

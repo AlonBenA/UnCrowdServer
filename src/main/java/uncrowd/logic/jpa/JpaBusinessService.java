@@ -11,8 +11,8 @@ import uncrowd.jpadal.NumbersDao;
 import uncrowd.logic.BusinessId;
 import uncrowd.logic.BusinessService;
 import uncrowd.logic.UpdateFromBusiness;
-import uncrowd.logic.Entity.BusinessEntity;
-import uncrowd.logic.Entity.LastDayCrowdEntity;
+import uncrowd.logic.entity.BusinessEntity;
+import uncrowd.logic.entity.LastDayCrowdEntity;
 
 @Service
 public class JpaBusinessService implements BusinessService {

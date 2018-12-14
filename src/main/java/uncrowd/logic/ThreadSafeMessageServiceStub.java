@@ -11,7 +11,7 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Service;
 
-import uncrowd.logic.Entity.MessageEntity;
+import uncrowd.logic.entity.MessageEntity;
 
 //@Service
 public class ThreadSafeMessageServiceStub implements MessageService{

@@ -19,17 +19,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import uncrowd.layout.ToClasses.BusinessIdTO;
-import uncrowd.layout.ToClasses.BusinessTO;
-import uncrowd.layout.ToClasses.MessageTO;
-import uncrowd.layout.ToClasses.TypeTO;
-import uncrowd.layout.ToClasses.UpdateFromBusinessTO;
+import uncrowd.layout.to.BusinessIdTO;
+import uncrowd.layout.to.BusinessTO;
+import uncrowd.layout.to.MessageTO;
+import uncrowd.layout.to.TypeTO;
+import uncrowd.layout.to.UpdateFromBusinessTO;
 import uncrowd.logic.BusinessService;
 import uncrowd.logic.ClientService;
 import uncrowd.logic.MessageAlreadyExistsException;
 import uncrowd.logic.MessageNotFoundException;
-import uncrowd.logic.Entity.BusinessEntity;
-import uncrowd.logic.Entity.BusinessTypeEntity;
+import uncrowd.logic.entity.BusinessEntity;
+import uncrowd.logic.entity.BusinessTypeEntity;
 
 @RestController
 public class WebUI {

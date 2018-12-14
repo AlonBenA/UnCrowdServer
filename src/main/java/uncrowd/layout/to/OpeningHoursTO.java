@@ -1,6 +1,6 @@
-package uncrowd.layout.ToClasses;
+package uncrowd.layout.to;
 
-import uncrowd.logic.Entity.OpeningHoursEntity;
+import uncrowd.logic.entity.OpeningHoursEntity;
 
 public class OpeningHoursTO implements Comparable<OpeningHoursTO>{
 	Long id;

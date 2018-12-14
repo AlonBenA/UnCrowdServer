@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import uncrowd.logic.Entity.MessageEntity;
+import uncrowd.logic.entity.MessageEntity;
 
 //@Service
 public class SynchronizedMessageServiceStub implements MessageService{

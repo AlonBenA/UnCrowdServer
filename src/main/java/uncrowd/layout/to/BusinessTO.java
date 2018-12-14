@@ -1,13 +1,13 @@
-package uncrowd.layout.ToClasses;
+package uncrowd.layout.to;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import uncrowd.logic.Entity.AverageEntity;
-import uncrowd.logic.Entity.BusinessEntity;
-import uncrowd.logic.Entity.BusinessTypeEntity;
-import uncrowd.logic.Entity.LastDayCrowdEntity;
-import uncrowd.logic.Entity.OpeningHoursEntity;
+import uncrowd.logic.entity.AverageEntity;
+import uncrowd.logic.entity.BusinessEntity;
+import uncrowd.logic.entity.BusinessTypeEntity;
+import uncrowd.logic.entity.LastDayCrowdEntity;
+import uncrowd.logic.entity.OpeningHoursEntity;
 
 public class BusinessTO {
 

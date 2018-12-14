@@ -1,6 +1,6 @@
-package uncrowd.layout.ToClasses;
+package uncrowd.layout.to;
 
-import uncrowd.logic.Entity.LastDayCrowdEntity;
+import uncrowd.logic.entity.LastDayCrowdEntity;
 
 public class LastDayCrowdTO {
 	Long id;

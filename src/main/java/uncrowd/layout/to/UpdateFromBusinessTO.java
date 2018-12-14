@@ -1,4 +1,4 @@
-package uncrowd.layout.ToClasses;
+package uncrowd.layout.to;
 
 import uncrowd.logic.UpdateFromBusiness;
 

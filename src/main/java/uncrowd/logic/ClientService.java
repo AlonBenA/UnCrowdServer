@@ -2,7 +2,7 @@ package uncrowd.logic;
 
 import java.util.List;
 
-import uncrowd.logic.Entity.*;
+import uncrowd.logic.entity.*;
 
 public interface ClientService {
 	public List<BusinessEntity> getAllBusinesses(double longitude, double latitude, int size, int page);

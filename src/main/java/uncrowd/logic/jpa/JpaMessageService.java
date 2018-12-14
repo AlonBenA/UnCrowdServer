@@ -15,7 +15,7 @@ import uncrowd.jpadal.NumbersDao;
 import uncrowd.logic.MessageAlreadyExistsException;
 import uncrowd.logic.MessageNotFoundException;
 import uncrowd.logic.MessageService;
-import uncrowd.logic.Entity.MessageEntity;
+import uncrowd.logic.entity.MessageEntity;
 
 @Service
 public class JpaMessageService implements MessageService{
