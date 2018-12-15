@@ -1,6 +1,7 @@
 package uncrowd.logic.jpa;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import uncrowd.logic.entity.BusinessTypeEntity;
 import uncrowd.logic.entity.CrowdHistoryEntity;
 import uncrowd.logic.entity.LastDayCrowdEntity;
 import uncrowd.logic.entity.OpeningHoursEntity;
+import uncrowd.logic.ml.testing.TestSetConverter;
 
 @Service
 public class jpaClientService implements ClientService {
@@ -152,12 +154,10 @@ public class jpaClientService implements ClientService {
 		averages(averages);
 		
 		List<LastDayCrowdEntity> lastDayCrowd = new ArrayList<>();
-		lastDayCrowd(lastDayCrowd);
-		
+		lastDayCrowd = lastDayCrowd(lastDayCrowd);
 		
 		List<OpeningHoursEntity> openingHours = new ArrayList<>();
 		openingHours(openingHours);
-
 		
 		List<CrowdHistoryEntity> crowdHistory = new ArrayList<>();
 		crowdHistory(crowdHistory);
@@ -175,6 +175,7 @@ public class jpaClientService implements ClientService {
 		b.setLastDayCrowd(lastDayCrowd);
 		b.setOpeningHours(openingHours);
 		b.setCrowdHistory(crowdHistory);
+		b.setNeedsExpectedCountUpdate(true);
 		
 		for(AverageEntity avg : averages) {
 			avg.setBusiness(b);
@@ -191,18 +192,6 @@ public class jpaClientService implements ClientService {
 		for(CrowdHistoryEntity ch : crowdHistory) {
 			ch.setBusiness(b);
 		}
-		
-		/*ch.setBusiness(b);
-		ch2.setBusiness(b);
-		
-		oh.setBusiness(b);
-		oh2.setBusiness(b);
-		
-		ldc.setBusiness(b);
-		ldc2.setBusiness(b);
-		
-		a.setBusiness(b);
-		a2.setBusiness(b);*/
 		
 		businesses.save(b);	
 	}
@@ -247,9 +236,9 @@ public class jpaClientService implements ClientService {
 		crowdHistory.add(ch);
 	}
 	
-	private void lastDayCrowd(List<LastDayCrowdEntity> lastDayCrowd) {
+	private List<LastDayCrowdEntity> lastDayCrowd(List<LastDayCrowdEntity> lastDayCrowd) {
 		
-		LastDayCrowdEntity ldc = new LastDayCrowdEntity();
+		/*LastDayCrowdEntity ldc = new LastDayCrowdEntity();
 		ldc.setCount(15);
 		ldc.setTimeId(1000);
 		ldc.setType(0);
@@ -327,7 +316,8 @@ public class jpaClientService implements ClientService {
 		ldc.setCount(5);
 		ldc.setTimeId(1300);
 		ldc.setType(2);
-		lastDayCrowd.add(ldc);
+		lastDayCrowd.add(ldc);*/
+		return (new TestSetConverter()).getTestData(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
 	}
 	
 	private void openingHours(List<OpeningHoursEntity> openingHours) {

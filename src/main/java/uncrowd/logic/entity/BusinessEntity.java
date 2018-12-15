@@ -23,6 +23,7 @@ public class BusinessEntity {
 	Double latitude;
 	Double Longitude;
 	Integer currCrowdCount;
+	Integer currCrowdTime;
 	Integer currCrowdLevel;
 	// The expected costumers count at the next time unit
 	// (Calculated via machine learning algorithm)
@@ -88,6 +89,12 @@ public class BusinessEntity {
 	public void setCurrCrowdCount(Integer currCrowdCount) {
 		this.currCrowdCount = currCrowdCount;
 	}
+	public Integer getCurrCrowdTime() {
+		return currCrowdTime;
+	}
+	public void setCurrCrowdTime(Integer currCrowdTime) {
+		this.currCrowdTime = currCrowdTime;
+	}
 	public Integer getCurrCrowdLevel() {
 		return currCrowdLevel;
 	}
@@ -149,7 +156,9 @@ public class BusinessEntity {
         this.openingHours = openingHours;
     }
     
-	public BusinessEntity(){}
+	public BusinessEntity(){
+		this.needsExpectedCountUpdate = false;
+	}
 	
 	@Override
 	public boolean equals(Object obj) {

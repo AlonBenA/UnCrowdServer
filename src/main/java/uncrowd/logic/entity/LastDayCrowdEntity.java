@@ -12,6 +12,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "LastDayCrowd")
 public class LastDayCrowdEntity {
+	public static final Integer COSTUMERS_COUNT_TYPE = 2;
+	public static final Integer ENTERING_COSTUMERS_TYPE = 1; 
+	public static final Integer EXITING_COSTUMERS_TYPE = 0;
+	
 	Long id;
 	Integer type;
 	Integer count;

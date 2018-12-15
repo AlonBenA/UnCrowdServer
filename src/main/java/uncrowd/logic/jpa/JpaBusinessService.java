@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import uncrowd.jpadal.BusinessDao;
 import uncrowd.jpadal.LastDayCrowdDao;
-import uncrowd.jpadal.NumbersDao;
 import uncrowd.logic.BusinessId;
 import uncrowd.logic.BusinessService;
 import uncrowd.logic.UpdateFromBusiness;
@@ -18,9 +17,6 @@ import uncrowd.logic.entity.LastDayCrowdEntity;
 public class JpaBusinessService implements BusinessService {
 	private LastDayCrowdDao lastDayCrowdTable;
 	private BusinessDao BusinessTable;
-	private static final Integer NUMBEROFPEPOLE = 2;
-	private static final Integer ENTER = 1;
-	private static final Integer EXIT = 0;
 	
 	@Autowired
 	public JpaBusinessService(LastDayCrowdDao lastDayCrowd,BusinessDao BusinessTable
@@ -41,22 +37,23 @@ public class JpaBusinessService implements BusinessService {
 			BusinessEntity Business = BusinessEntityOpt.get();
 			Integer timeId = newUpdate.getDate();
 			
-			LastDayCrowdEntity enter = new LastDayCrowdEntity(newUpdate.getId(),ENTER,
+			LastDayCrowdEntity enter = new LastDayCrowdEntity(newUpdate.getId(),LastDayCrowdEntity.ENTERING_COSTUMERS_TYPE,
 					newUpdate.getNumberOFPeopleThatEnter(),	
 					timeId,
 					Business);
 			
-			LastDayCrowdEntity exit = new LastDayCrowdEntity(newUpdate.getId(),EXIT,
+			LastDayCrowdEntity exit = new LastDayCrowdEntity(newUpdate.getId(),LastDayCrowdEntity.EXITING_COSTUMERS_TYPE,
 					newUpdate.getNumberOFPeopleThatExit(),	
 					timeId,
 					Business);
 			
-			LastDayCrowdEntity numberOfpeople = new LastDayCrowdEntity(newUpdate.getId(),NUMBEROFPEPOLE,
+			LastDayCrowdEntity numberOfpeople = new LastDayCrowdEntity(newUpdate.getId(),LastDayCrowdEntity.COSTUMERS_COUNT_TYPE,
 					newUpdate.getNumberOFPeople(),	
 					timeId,
 					Business);
 			
 			Business.setCurrCrowdCount(newUpdate.getNumberOFPeople());
+			Business.setCurrCrowdTime(timeId);
 			
 			lastDayCrowdTable.save(numberOfpeople);
 			lastDayCrowdTable.save(enter);

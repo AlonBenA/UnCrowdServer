@@ -1,7 +1,10 @@
 package uncrowd.layout.to;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 
 import uncrowd.logic.entity.AverageEntity;
 import uncrowd.logic.entity.BusinessEntity;
@@ -18,6 +21,8 @@ public class BusinessTO {
 	Double lon;
 	Integer crowdLevel;
 	Integer crowdCount;
+	// The time the last update of crowd count was received
+	Integer crowdCountTime;
 	// The expected costumers count at the next time unit
 	// (Calculated via machine learning algorithm)
 	Integer expectedCrowdCount;
@@ -39,6 +44,7 @@ public class BusinessTO {
 			this.lon = businessEntity.getLongitude();
 			this.crowdLevel = businessEntity.getCurrCrowdLevel();
 			this.crowdCount = businessEntity.getCurrCrowdCount();
+			this.crowdCountTime = businessEntity.getCurrCrowdTime();
 			
 			if(businessEntity.getAverages() != null) {
 				averages = new ArrayList<>();
@@ -47,27 +53,7 @@ public class BusinessTO {
 				}
 			}
 			
-			if(businessEntity.getCrowdHistory() != null) {
-				crowdHistory = new ArrayList<>();
-				
-				// Pulling the last few crowd counts from the crowd history
-				List<LastDayCrowdEntity> lastDayCrowdList = businessEntity.getLastDayCrowd();
-				// TODO: Put this 3 in a const
-				List<LastDayCrowdEntity> lastRecords = lastDayCrowdList.subList(lastDayCrowdList.size() - (3 * 3), lastDayCrowdList.size());
-				for(LastDayCrowdEntity lastDayCrowd: lastRecords) {
-					// TODO: Change this 2 to const
-					// Taking only the total count and sending to client 
-					// (in order for it to display current trend graph)
-					if (lastDayCrowd.getType() == 2) {
-						// Converting the LastDay entity to CrowdHistoryTO
-						CrowdHistoryTO currCrowdHistory = new CrowdHistoryTO();
-						currCrowdHistory.setBusinessId(id);
-						currCrowdHistory.setCrowdCount(lastDayCrowd.getCount());
-						currCrowdHistory.setDateTime(lastDayCrowd.getTimeId());
-						crowdHistory.add(currCrowdHistory);
-					}
-				}
-			}
+			pullCrowdHistoryFromLastDay(businessEntity.getLastDayCrowd());
 			
 			if(businessEntity.getTypes() != null) {
 				types = new ArrayList<>();
@@ -87,6 +73,43 @@ public class BusinessTO {
 		}
 	}
 
+	private void pullCrowdHistoryFromLastDay(List<LastDayCrowdEntity> lastDayCrowdList) {
+		crowdHistory = new ArrayList<>();
+		
+		if(lastDayCrowdList != null && lastDayCrowdList.size() > 0) {
+			// Generate an iterator. Start just after the last element.
+			ListIterator<LastDayCrowdEntity> li = lastDayCrowdList.listIterator(lastDayCrowdList.size());
+	
+			int currTime = 
+					LocalDateTime.now().toLocalTime().getHour() * 100 + 
+					LocalDateTime.now().toLocalTime().getMinute();
+
+			// Iterate in reverse.
+			while(li.hasPrevious()) {
+				LastDayCrowdEntity currEntity = li.previous();
+				// Checking if the record is earlier than now
+				if(currEntity.getType() == LastDayCrowdEntity.COSTUMERS_COUNT_TYPE && 
+						currEntity.getTimeId() <= currTime) {
+					// Converting the LastDay entity to CrowdHistoryTO
+					CrowdHistoryTO currCrowdHistory = new CrowdHistoryTO();
+					currCrowdHistory.setBusinessId(id);
+					currCrowdHistory.setCrowdCount(currEntity.getCount());
+					currCrowdHistory.setDateTime(currEntity.getTimeId());
+					crowdHistory.add(currCrowdHistory);
+				}
+			}
+			
+			// TODO: Put this 3 in a const
+			// Taking only the last 3 records back
+			if(crowdHistory.size() >= 3){
+				crowdHistory = crowdHistory.subList(0, 3);
+			}
+			
+			// Because we traversed the list from the end, the order is reverse (latest time is first)
+			Collections.reverse(crowdHistory);
+		}
+	}
+	
 	public long getId() {
 		return id;
 	}
@@ -157,6 +180,14 @@ public class BusinessTO {
 
 	public void setCrowdCount(Integer crowdCount) {
 		this.crowdCount = crowdCount;
+	}
+	
+	public Integer getCrowdCountTime() {
+		return crowdCountTime;
+	}
+
+	public void setCrowdCountTime(Integer crowdCountTime) {
+		this.crowdCountTime = crowdCountTime;
 	}
 
 	public Integer getExpectedCrowdCount() {

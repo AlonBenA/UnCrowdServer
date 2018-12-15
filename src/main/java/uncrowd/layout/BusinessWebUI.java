@@ -28,33 +28,32 @@ public class BusinessWebUI {
 	
 	
 	// Local host 
-		//http://localhost:8083/BusinessID
-		@RequestMapping(
-				method=RequestMethod.GET,
-				path="/BusinessID",
-				produces=MediaType.APPLICATION_JSON_VALUE)
-		public BusinessIdTO getBusinessId (HttpServletRequest request) throws MessageNotFoundException {
-			
-			BusinessId businessId = new BusinessId();
-			businessId.setIp(request.getRemoteAddr());
-			businessId = this.business.getBusinessId(businessId);
-			
-			return new BusinessIdTO(businessId);
-		}
+	//http://localhost:8083/BusinessID
+	@RequestMapping(
+			method=RequestMethod.GET,
+			path="/BusinessID",
+			produces=MediaType.APPLICATION_JSON_VALUE)
+	public BusinessIdTO getBusinessId (HttpServletRequest request) throws MessageNotFoundException {
 		
-		// Local host 
-		//http://localhost:8083/upateFromBusiness
-		@RequestMapping(
-				method=RequestMethod.POST,
-				path="/updateFromBusiness",
-				produces=MediaType.APPLICATION_JSON_VALUE,
-				consumes=MediaType.APPLICATION_JSON_VALUE)
-		public UpdateFromBusinessTO upateFromBusiness (@RequestBody UpdateFromBusinessTO newUpdate) {
-			//HttpServletRequest request
-			//System.out.println("\n\n\n upate From Business ************** Remote Address: " + request.getRemoteAddr());
-			
-			return new UpdateFromBusinessTO(
-					this.business.addNewUpdate(newUpdate.toEntity()));
-		}
+		BusinessId businessId = new BusinessId();
+		businessId.setIp(request.getRemoteAddr());
+		businessId = this.business.getBusinessId(businessId);
+		
+		return new BusinessIdTO(businessId);
+	}
 	
+	// Local host 
+	//http://localhost:8083/upateFromBusiness
+	@RequestMapping(
+			method=RequestMethod.POST,
+			path="/updateFromBusiness",
+			produces=MediaType.APPLICATION_JSON_VALUE,
+			consumes=MediaType.APPLICATION_JSON_VALUE)
+	public UpdateFromBusinessTO upateFromBusiness (@RequestBody UpdateFromBusinessTO newUpdate) {
+		//HttpServletRequest request
+		//System.out.println("\n\n\n upate From Business ************** Remote Address: " + request.getRemoteAddr());
+		
+		return new UpdateFromBusinessTO(
+				this.business.addNewUpdate(newUpdate.toEntity()));
+	}
 }

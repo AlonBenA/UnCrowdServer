@@ -4,27 +4,20 @@ package uncrowd.layout;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import uncrowd.layout.to.BusinessIdTO;
 import uncrowd.layout.to.BusinessTO;
-import uncrowd.layout.to.MessageTO;
 import uncrowd.layout.to.TypeTO;
-import uncrowd.layout.to.UpdateFromBusinessTO;
-import uncrowd.logic.BusinessService;
 import uncrowd.logic.ClientService;
 import uncrowd.logic.MessageAlreadyExistsException;
 import uncrowd.logic.MessageNotFoundException;
@@ -32,12 +25,12 @@ import uncrowd.logic.entity.BusinessEntity;
 import uncrowd.logic.entity.BusinessTypeEntity;
 
 @RestController
-public class WebUI {
+public class ClientsWebUI {
 	private ClientService clientService;
 	
 	
 	@Autowired
-	public void setMessages(ClientService clientService) {
+	public void setService(ClientService clientService) {
 		this.clientService = clientService;
 	}
 	
@@ -105,20 +98,6 @@ public class WebUI {
 	public BusinessTO Businessinfo (@PathVariable("id") Long id) throws MessageNotFoundException {		
 		return new BusinessTO(this.clientService.getBusinessUpdate(id));
 	}
-	
-	// Local host 
-	//http://localhost:8083/timeToUpdate
-	@RequestMapping(
-			method=RequestMethod.PUT,
-			path="/timeToUpdate",
-			consumes=MediaType.APPLICATION_JSON_VALUE)
-	public void timeToUpdate (
-			@RequestBody MessageTO updatedMessage) throws Exception {
-		
-		System.out.println("\n\n time to update \n\n");
-		
-		// TODO: Update...
-	}
 
 	// Local host 
 	//http://localhost:8083/AllBusinesses/lat/lon?size=5&page=0
@@ -169,7 +148,6 @@ public class WebUI {
 		
 		return businessTO;
 	}
-	
 }
 
 
