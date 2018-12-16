@@ -1,11 +1,12 @@
 package uncrowd.logic;
 
-public class BusinessId {
+public class BusinessData {
 
 	long id;
 	String ip;
+	Integer time;
 	
-	public BusinessId() {
+	public BusinessData() {
 		
 	}
 
@@ -23,6 +24,14 @@ public class BusinessId {
 
 	public void setIp(String ip) {
 		this.ip = ip;
+	}
+
+	public int getTime() {
+		return time;
+	}
+
+	public void setTime(int time) {
+		this.time = time;
 	}
 	
 	

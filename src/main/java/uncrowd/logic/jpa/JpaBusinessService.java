@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import uncrowd.jpadal.BusinessDao;
 import uncrowd.jpadal.LastDayCrowdDao;
-import uncrowd.logic.BusinessId;
+import uncrowd.logic.BusinessData;
 import uncrowd.logic.BusinessService;
 import uncrowd.logic.UpdateFromBusiness;
 import uncrowd.logic.entity.BusinessEntity;
@@ -71,9 +71,10 @@ public class JpaBusinessService implements BusinessService {
 
 
 	@Override
-	public BusinessId getBusinessId(BusinessId businessId) {
+	public BusinessData getBusinessData(BusinessData businessId) {
 		
 		businessId.setId(3);
+		businessId.setTime(10);
 		return businessId;
 	}
 

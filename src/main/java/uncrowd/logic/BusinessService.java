@@ -14,7 +14,7 @@ public interface BusinessService {
 	
 	public UpdateFromBusiness addNewUpdate(UpdateFromBusiness newUpdate);
 	
-	public BusinessId getBusinessId(BusinessId businessId);
+	public BusinessData getBusinessData(BusinessData businessId);
 	
 	
 }

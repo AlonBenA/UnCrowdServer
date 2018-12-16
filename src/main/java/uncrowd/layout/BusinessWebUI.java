@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import uncrowd.layout.to.BusinessIdTO;
+import uncrowd.layout.to.BusinessDataTO;
 import uncrowd.layout.to.UpdateFromBusinessTO;
-import uncrowd.logic.BusinessId;
+import uncrowd.logic.BusinessData;
 import uncrowd.logic.BusinessService;
 import uncrowd.logic.MessageNotFoundException;
 
@@ -33,13 +33,13 @@ public class BusinessWebUI {
 			method=RequestMethod.GET,
 			path="/BusinessID",
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public BusinessIdTO getBusinessId (HttpServletRequest request) throws MessageNotFoundException {
+	public BusinessDataTO getBusinessId (HttpServletRequest request) throws MessageNotFoundException {
 		
-		BusinessId businessId = new BusinessId();
-		businessId.setIp(request.getRemoteAddr());
-		businessId = this.business.getBusinessId(businessId);
+		BusinessData Data = new BusinessData();
+		Data.setIp(request.getRemoteAddr());
+		Data = this.business.getBusinessData(Data);
 		
-		return new BusinessIdTO(businessId);
+		return new BusinessDataTO(Data);
 	}
 	
 	// Local host 
