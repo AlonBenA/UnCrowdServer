@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import uncrowd.layout.to.BusinessTO;
 import uncrowd.layout.to.TypeTO;
 import uncrowd.logic.ClientService;
-import uncrowd.logic.MessageAlreadyExistsException;
 import uncrowd.logic.MessageNotFoundException;
 import uncrowd.logic.entity.BusinessEntity;
 import uncrowd.logic.entity.BusinessTypeEntity;
@@ -125,16 +124,6 @@ public class ClientsWebUI {
 	@ExceptionHandler//(MessageNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ErrorMessage handleException (MessageNotFoundException e) {
-		String message = e.getMessage();
-		if (message == null) {
-			message = "There is no relevant message";
-		}
-		return new ErrorMessage(message);
-	}
-	
-	@ExceptionHandler
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	public ErrorMessage handleException (MessageAlreadyExistsException e) {
 		String message = e.getMessage();
 		if (message == null) {
 			message = "There is no relevant message";

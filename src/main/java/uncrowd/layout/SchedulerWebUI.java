@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import uncrowd.logic.MessageAlreadyExistsException;
 import uncrowd.logic.MessageNotFoundException;
 import uncrowd.logic.SchedualerService;
 
@@ -47,16 +46,6 @@ public class SchedulerWebUI {
 	@ExceptionHandler//(MessageNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ErrorMessage handleException (MessageNotFoundException e) {
-		String message = e.getMessage();
-		if (message == null) {
-			message = "There is no relevant message";
-		}
-		return new ErrorMessage(message);
-	}
-	
-	@ExceptionHandler
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	public ErrorMessage handleException (MessageAlreadyExistsException e) {
 		String message = e.getMessage();
 		if (message == null) {
 			message = "There is no relevant message";
