@@ -26,7 +26,6 @@ public class WebUITests {
 		this.restTemplate = new RestTemplate();
 		
 		url = "http://localhost:" + port + "/messages";
-		System.err.println(this.url);
 	}
 	
 	@Before
@@ -36,15 +35,6 @@ public class WebUITests {
 	
 	@Test
 	public void testServerIsUp () throws Exception {
-		
-	}
-	
-	@Test(expected=Exception.class)
-	public void testDeleteNonExistingMessage () throws Exception{
-		//Given server is up 
-
-		//When I DELETE /messages/hello
-		this.restTemplate.delete(this.url + "/{name}", "hello");
 		
 	}
 }

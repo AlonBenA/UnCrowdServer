@@ -6,20 +6,16 @@ import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import uncrowd.layout.to.BusinessTO;
 import uncrowd.layout.to.TypeTO;
 import uncrowd.logic.ClientService;
-import uncrowd.logic.MessageNotFoundException;
 import uncrowd.logic.entity.BusinessEntity;
 import uncrowd.logic.entity.BusinessTypeEntity;
 
@@ -50,7 +46,7 @@ public class ClientsWebUI {
 			@PathVariable("lon") double lon,
 			@RequestParam(name="types", required=false, defaultValue="") String types,
 			@RequestParam(name="size", required=false, defaultValue="30") int size, 
-			@RequestParam(name="page", required=false, defaultValue="0") int page	) throws MessageNotFoundException {
+			@RequestParam(name="page", required=false, defaultValue="0") int page	) {
 		
 		List<Long> typesIds = new ArrayList<>();
 		
@@ -75,7 +71,7 @@ public class ClientsWebUI {
 			method=RequestMethod.GET,
 			path="/AllBusinessTypes",
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public List<TypeTO> getAllBusinessTypes () throws MessageNotFoundException {
+	public List<TypeTO> getAllBusinessTypes () {
 		
 		// Getting the types from the client service
 		List<BusinessTypeEntity> rv = this.clientService.getBusinessesTypes();
@@ -94,7 +90,7 @@ public class ClientsWebUI {
 			method=RequestMethod.GET,
 			path="/Businessinfo/{id}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public BusinessTO Businessinfo (@PathVariable("id") Long id) throws MessageNotFoundException {		
+	public BusinessTO Businessinfo (@PathVariable("id") Long id) {		
 		return new BusinessTO(this.clientService.getBusinessUpdate(id));
 	}
 
@@ -119,16 +115,6 @@ public class ClientsWebUI {
 			path="/deafults")
 	public void addDeafultValues () throws Exception {		
 		this.clientService.addDeafultValues();
-	}
-	
-	@ExceptionHandler//(MessageNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ErrorMessage handleException (MessageNotFoundException e) {
-		String message = e.getMessage();
-		if (message == null) {
-			message = "There is no relevant message";
-		}
-		return new ErrorMessage(message);
 	}
 	
 	private List<BusinessTO> convertBusinessEntityToTO(List<BusinessEntity> entitiesList){

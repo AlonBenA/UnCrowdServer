@@ -1,14 +1,9 @@
 package uncrowd.layout;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import uncrowd.logic.MessageNotFoundException;
 import uncrowd.logic.SchedualerService;
 
 @RestController
@@ -41,15 +36,5 @@ public class SchedulerWebUI {
 		System.out.println("\n\n End of day update \n\n");
 		// TODO: Remove from comment after done testing
 		//this.schedualerService.updateEndOfDay();
-	}
-	
-	@ExceptionHandler//(MessageNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ErrorMessage handleException (MessageNotFoundException e) {
-		String message = e.getMessage();
-		if (message == null) {
-			message = "There is no relevant message";
-		}
-		return new ErrorMessage(message);
 	}
 }

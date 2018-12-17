@@ -13,7 +13,6 @@ import uncrowd.layout.to.BusinessDataTO;
 import uncrowd.layout.to.UpdateFromBusinessTO;
 import uncrowd.logic.BusinessData;
 import uncrowd.logic.BusinessService;
-import uncrowd.logic.MessageNotFoundException;
 
 
 @RestController
@@ -33,7 +32,7 @@ public class BusinessWebUI {
 			method=RequestMethod.GET,
 			path="/BusinessID",
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public BusinessDataTO getBusinessId (HttpServletRequest request) throws MessageNotFoundException {
+	public BusinessDataTO getBusinessId (HttpServletRequest request) {
 		
 		BusinessData Data = new BusinessData();
 		Data.setIp(request.getRemoteAddr());
