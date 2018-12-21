@@ -19,8 +19,7 @@ public class JpaBusinessService implements BusinessService {
 	private BusinessDao BusinessTable;
 	
 	@Autowired
-	public JpaBusinessService(LastDayCrowdDao lastDayCrowd,BusinessDao BusinessTable
-			) {
+	public JpaBusinessService(LastDayCrowdDao lastDayCrowd,BusinessDao BusinessTable) {
 		super();
 		this.lastDayCrowdTable = lastDayCrowd;
 		this.BusinessTable = BusinessTable;
@@ -54,6 +53,7 @@ public class JpaBusinessService implements BusinessService {
 			
 			Business.setCurrCrowdCount(newUpdate.getNumberOFPeople());
 			Business.setCurrCrowdTime(timeId);
+			Business.setNeedsExpectedCountUpdate(true);
 			
 			lastDayCrowdTable.save(numberOfpeople);
 			lastDayCrowdTable.save(enter);
@@ -74,7 +74,7 @@ public class JpaBusinessService implements BusinessService {
 	public BusinessData getBusinessData(BusinessData businessId) {
 		
 		businessId.setId(3);
-		businessId.setTime(10);
+		businessId.setTime(60);
 		return businessId;
 	}
 

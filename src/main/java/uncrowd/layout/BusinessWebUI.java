@@ -30,7 +30,7 @@ public class BusinessWebUI {
 	//http://localhost:8083/BusinessID
 	@RequestMapping(
 			method=RequestMethod.GET,
-			path="/BusinessID",
+			path="/BusinessData",
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public BusinessDataTO getBusinessId (HttpServletRequest request) {
 		

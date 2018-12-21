@@ -1,6 +1,8 @@
 package uncrowd.logic.ml;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import uncrowd.logic.entity.LastDayCrowdEntity;
@@ -15,12 +17,26 @@ import weka.classifiers.timeseries.WekaForecaster;
 public class CrowdPredictor {
 	
 	// The number of minutes to add to the current count in order to get the prediction time
-	private static final int PREDICTION_INTERVAL_MIN = 30;
+	private static final int PREDICTION_INTERVAL_MIN = 1;
 	
-	public Prediction predict(int day, int month, int year, List<LastDayCrowdEntity> training, int currCrowdCount, int currCrowdCountTime) {
+	public Prediction predict(int day, int month, int year, List<LastDayCrowdEntity> training, int currCrowdCount, Integer currCrowdCountTime) {
 		Prediction prediction = null;
 		
-		if(training != null && training.size() > 0) {
+		int predictionTime;
+		
+		if(currCrowdCountTime == null) {
+			int currTime = 
+					LocalDateTime.now().toLocalTime().getHour() * 100 + 
+					LocalDateTime.now().toLocalTime().getMinute();
+			currCrowdCountTime = currTime;
+		}
+		
+		// Calculating the time for the next prediction 
+		// (by adding PREDICTION_INTERVAL_MIN to the last crowd update time)
+		predictionTime = getPredictionTime(currCrowdCountTime); 
+
+		
+		if(training != null && training.size() > 0 && currCrowdCountTime != null) {
 			
 			// Define the feature and label attributes
 			ArrayList<Attribute> attributes = new ArrayList<>();
@@ -64,15 +80,15 @@ public class CrowdPredictor {
 				// Adding the difference with the current crowd count and rounding the result
 				// (if the count results in a negative number, returning 0)
 				int predictionCount = (int)Math.round(Math.max(0, currCrowdCount + predictedDiffFromCurrCount));
-				// Calculating the time for the next prediction 
-				// (by adding PREDICTION_INTERVAL_MIN to the last crowd update time)
-				int predictionTime = getPredictionTime(currCrowdCountTime); 
-				
+
 				prediction = new Prediction(predictionCount, 
 						predictionTime);
 			}catch(Exception ex) {
 				ex.printStackTrace(System.err);
 			}
+		}else{
+			prediction = new Prediction(currCrowdCount, 
+					predictionTime);
 		}
 		return prediction;
 	}

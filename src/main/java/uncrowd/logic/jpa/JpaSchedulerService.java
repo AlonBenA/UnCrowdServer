@@ -43,27 +43,28 @@ public class JpaSchedulerService implements SchedualerService{
 			int day = now.get(Calendar.DAY_OF_MONTH);
 			int year = now.get(Calendar.YEAR);
 			int month = now.get(Calendar.MONTH);
-			
-			// TODO: Remove this, this is only for testing
-			int currCrowd = 0, currCrowdTime = 0;
-			List<LastDayCrowdEntity> ldcUpdated = new ArrayList<>();
-			List<LastDayCrowdEntity> ldcToRemove = new ArrayList<>();
-			int currTime = 
-					LocalDateTime.now().toLocalTime().getHour() * 100 + 
-					LocalDateTime.now().toLocalTime().getMinute();
-			
-			for(LastDayCrowdEntity ldc : bis.getLastDayCrowd()) {
-				if(currTime > ldc.getTimeId() ) {
-					ldcUpdated.add(ldc);
-					if(ldc.getType() == LastDayCrowdEntity.COSTUMERS_COUNT_TYPE) {
-						currCrowd = ldc.getCount();
-						currCrowdTime = ldc.getTimeId();
+			if(bis.getIsMLTestBusiness()) {
+				// TODO: Remove this, this is only for testing
+				int currCrowd = 0, currCrowdTime = 0;
+				List<LastDayCrowdEntity> ldcUpdated = new ArrayList<>();
+				List<LastDayCrowdEntity> ldcToRemove = new ArrayList<>();
+				int currTime = 
+						LocalDateTime.now().toLocalTime().getHour() * 100 + 
+						LocalDateTime.now().toLocalTime().getMinute();
+				
+				for(LastDayCrowdEntity ldc : bis.getLastDayCrowd()) {
+					if(currTime > ldc.getTimeId() ) {
+						ldcUpdated.add(ldc);
+						if(ldc.getType() == LastDayCrowdEntity.COSTUMERS_COUNT_TYPE) {
+							currCrowd = ldc.getCount();
+							currCrowdTime = ldc.getTimeId();
+						}
 					}
 				}
+				bis.setCurrCrowdCount(currCrowd);
+				bis.setCurrCrowdTime(currCrowdTime);
+				bis.setLastDayCrowd(ldcUpdated);		
 			}
-			bis.setCurrCrowdCount(currCrowd);
-			bis.setCurrCrowdTime(currCrowdTime);
-			bis.setLastDayCrowd(ldcUpdated);			
 			
 			// Calling the predictor to predict the crowd count:
 			Prediction prediction = new CrowdPredictor().predict(day, 

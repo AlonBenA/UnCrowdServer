@@ -32,6 +32,8 @@ public class BusinessEntity {
 	Integer expectedCountTime;
 	// Indicating if we need to calculate the expected count cause there was an actual count update
 	Boolean needsExpectedCountUpdate;
+	// Indicating if we need to calculate the expected count cause there was an actual count update
+	Boolean isMLTestBusiness;
 	List<AverageEntity> averages;
 	List<CrowdHistoryEntity> crowdHistory;
 	List<LastDayCrowdEntity> lastDayCrowd;
@@ -118,6 +120,13 @@ public class BusinessEntity {
 	}
 	public void setNeedsExpectedCountUpdate(Boolean needsExpectedCountUpdate) {
 		this.needsExpectedCountUpdate = needsExpectedCountUpdate;
+	}
+	
+	public Boolean getIsMLTestBusiness() {
+		return isMLTestBusiness;
+	}
+	public void setIsMLTestBusiness(Boolean isMLTestBusiness) {
+		this.isMLTestBusiness = isMLTestBusiness;
 	}
 	
 	@OneToMany(mappedBy = "business", cascade = CascadeType.ALL)

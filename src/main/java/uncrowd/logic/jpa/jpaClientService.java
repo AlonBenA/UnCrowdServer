@@ -147,8 +147,13 @@ public class jpaClientService implements ClientService {
 	@Override
 	public void addDeafultValues() {
 		
+		addBusinessA();	
+		addBusinessB();
+	}
+
+	private void addBusinessB() {
 		List<BusinessTypeEntity> types = new ArrayList<>();
-		types(types);
+		types2(types);
 		
 		List<AverageEntity> averages = new ArrayList<>();
 		averages(averages);
@@ -164,12 +169,13 @@ public class jpaClientService implements ClientService {
 		
 		
 		BusinessEntity b = new BusinessEntity();
-		b.setAddress("Sheshet Hayamim 200, Bnei Brak");
-		b.setLatitude(32.114825);
-		b.setLongitude(34.816782);
+		b.setAddress("Sheshet Hayamim 202, Bnei Brak");
+		b.setLatitude(32.112825);
+		b.setLongitude(34.814782);
 		b.setCurrCrowdCount(20);
-		b.setCurrCrowdLevel(4);
-		b.setName("Toys R Us");
+		b.setCurrCrowdLevel(3);
+		b.setName("Mega");
+		b.setIsMLTestBusiness(true);
 		b.setTypes(types);
 		b.setAverages(averages);
 		b.setLastDayCrowd(lastDayCrowd);
@@ -193,17 +199,80 @@ public class jpaClientService implements ClientService {
 			ch.setBusiness(b);
 		}
 		
-		businesses.save(b);	
+		businesses.save(b);
+	}
+	
+	private void addBusinessA() {
+		List<BusinessTypeEntity> types = new ArrayList<>();
+		types(types);
+		
+		List<AverageEntity> averages = new ArrayList<>();
+		averages(averages);
+		
+		List<LastDayCrowdEntity> lastDayCrowd = new ArrayList<>();
+		lastDayCrowd2(lastDayCrowd);
+		
+		List<OpeningHoursEntity> openingHours = new ArrayList<>();
+		openingHours(openingHours);
+		
+		List<CrowdHistoryEntity> crowdHistory = new ArrayList<>();
+		crowdHistory(crowdHistory);
+		
+		
+		BusinessEntity b = new BusinessEntity();
+		b.setAddress("Sheshet Hayamim 200, Bnei Brak");
+		b.setLatitude(32.114825);
+		b.setLongitude(34.816782);
+		b.setCurrCrowdCount(0);
+		b.setCurrCrowdLevel(4);
+		b.setName("Toys R Us");
+		b.setIsMLTestBusiness(false);
+		b.setTypes(types);
+		b.setAverages(averages);
+		b.setLastDayCrowd(lastDayCrowd);
+		b.setOpeningHours(openingHours);
+		b.setCrowdHistory(crowdHistory);
+		b.setNeedsExpectedCountUpdate(true);
+		
+		for(AverageEntity avg : averages) {
+			avg.setBusiness(b);
+		}
+		
+		for(LastDayCrowdEntity ldc : lastDayCrowd) {
+			ldc.setBusiness(b);
+		}
+		
+		for(OpeningHoursEntity oh : openingHours) {
+			oh.setBusiness(b);
+		}
+		
+		for(CrowdHistoryEntity ch : crowdHistory) {
+			ch.setBusiness(b);
+		}
+		
+		businesses.save(b);
 	}
 
 	private void types(List<BusinessTypeEntity> types) {
 		BusinessTypeEntity type = new BusinessTypeEntity();
-		type.setName("type2");
+		type.setName("Toys");
 		types.add(type);
 		this.businessTypes.save(type);
 		
 		type = new BusinessTypeEntity();
-		type.setName("type3");
+		type.setName("Kids");
+		types.add(type);
+		this.businessTypes.save(type);
+	}
+	
+	private void types2(List<BusinessTypeEntity> types) {
+		BusinessTypeEntity type = new BusinessTypeEntity();
+		type.setName("Dairy");
+		types.add(type);
+		this.businessTypes.save(type);
+		
+		type = new BusinessTypeEntity();
+		type.setName("Meat");
 		types.add(type);
 		this.businessTypes.save(type);
 	}
@@ -236,9 +305,9 @@ public class jpaClientService implements ClientService {
 		crowdHistory.add(ch);
 	}
 	
-	private List<LastDayCrowdEntity> lastDayCrowd(List<LastDayCrowdEntity> lastDayCrowd) {
-		
-		/*LastDayCrowdEntity ldc = new LastDayCrowdEntity();
+	private void lastDayCrowd2(List<LastDayCrowdEntity> lastDayCrowd){
+	
+		LastDayCrowdEntity ldc = new LastDayCrowdEntity();
 		ldc.setCount(15);
 		ldc.setTimeId(1000);
 		ldc.setType(0);
@@ -316,7 +385,10 @@ public class jpaClientService implements ClientService {
 		ldc.setCount(5);
 		ldc.setTimeId(1300);
 		ldc.setType(2);
-		lastDayCrowd.add(ldc);*/
+		lastDayCrowd.add(ldc);
+	}
+	
+	private List<LastDayCrowdEntity> lastDayCrowd(List<LastDayCrowdEntity> lastDayCrowd) {
 		return (new TestSetConverter()).getTestData(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
 	}
 	
