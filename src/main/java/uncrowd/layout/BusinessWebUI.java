@@ -27,7 +27,7 @@ public class BusinessWebUI {
 	
 	
 	// Local host 
-	//http://localhost:8083/BusinessID
+	//http://localhost:8083/BusinessData
 	@RequestMapping(
 			method=RequestMethod.GET,
 			path="/BusinessData",
