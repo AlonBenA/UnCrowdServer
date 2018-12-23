@@ -60,4 +60,18 @@ public class LastDayCrowdTO {
 			this.businessId = entity.getBusiness().getId();
 		}
 	}
+	
+	@Override
+	public String toString() {
+		String typeString = "";
+		if(this.type == LastDayCrowdEntity.COSTUMERS_COUNT_TYPE) {
+			typeString = "Count";
+		}else if(this.type == LastDayCrowdEntity.ENTERING_COSTUMERS_TYPE) {
+			typeString = "Entring";
+		}else if(this.type == LastDayCrowdEntity.EXITING_COSTUMERS_TYPE) {
+			typeString = "Exiting";
+		}
+
+		return this.count + " " + typeString;
+	}
 }

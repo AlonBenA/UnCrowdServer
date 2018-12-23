@@ -1,5 +1,7 @@
 package uncrowd.logic.jpa;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import uncrowd.logic.BusinessService;
 import uncrowd.logic.UpdateFromBusiness;
 import uncrowd.logic.entity.BusinessEntity;
 import uncrowd.logic.entity.LastDayCrowdEntity;
+import uncrowd.utils.TimeUtils;
 
 @Service
 public class JpaBusinessService implements BusinessService {
@@ -72,9 +75,19 @@ public class JpaBusinessService implements BusinessService {
 
 	@Override
 	public BusinessData getBusinessData(BusinessData businessId) {
+		List<BusinessEntity> allList = new ArrayList<>();
 		
-		businessId.setId(3);
-		businessId.setTime(60);
+		this.BusinessTable.findAll()
+			.forEach(allList::add);
+
+		// Searching for the first business that is not fake or for tets
+		for(BusinessEntity bis: allList) {
+			if(!bis.getIsFakeBusiness() && !bis.getIsMLTestBusiness()) {
+				businessId.setId(bis.getId());
+			}
+		}
+		
+		businessId.setTime(TimeUtils.CROWD_UPDATES_INTERVAL_SECONDS);
 		return businessId;
 	}
 

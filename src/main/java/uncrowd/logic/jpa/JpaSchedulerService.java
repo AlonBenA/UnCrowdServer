@@ -1,6 +1,5 @@
 package uncrowd.logic.jpa;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -16,6 +15,7 @@ import uncrowd.logic.entity.BusinessEntity;
 import uncrowd.logic.entity.LastDayCrowdEntity;
 import uncrowd.logic.ml.CrowdPredictor;
 import uncrowd.logic.ml.Prediction;
+import uncrowd.utils.TimeUtils;
 
 @Service
 public class JpaSchedulerService implements SchedualerService{
@@ -43,17 +43,15 @@ public class JpaSchedulerService implements SchedualerService{
 			int day = now.get(Calendar.DAY_OF_MONTH);
 			int year = now.get(Calendar.YEAR);
 			int month = now.get(Calendar.MONTH);
-			if(bis.getIsMLTestBusiness()) {
+			if(bis.getIsMLTestBusiness() || bis.getIsFakeBusiness()) {
 				// TODO: Remove this, this is only for testing
 				int currCrowd = 0, currCrowdTime = 0;
 				List<LastDayCrowdEntity> ldcUpdated = new ArrayList<>();
-				List<LastDayCrowdEntity> ldcToRemove = new ArrayList<>();
 				int currTime = 
-						LocalDateTime.now().toLocalTime().getHour() * 100 + 
-						LocalDateTime.now().toLocalTime().getMinute();
+						TimeUtils.getCurrTime();
 				
 				for(LastDayCrowdEntity ldc : bis.getLastDayCrowd()) {
-					if(currTime > ldc.getTimeId() ) {
+					if(currTime >= ldc.getTimeId() ) {
 						ldcUpdated.add(ldc);
 						if(ldc.getType() == LastDayCrowdEntity.COSTUMERS_COUNT_TYPE) {
 							currCrowd = ldc.getCount();

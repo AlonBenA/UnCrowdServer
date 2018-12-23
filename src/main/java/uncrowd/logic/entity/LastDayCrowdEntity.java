@@ -79,4 +79,24 @@ public class LastDayCrowdEntity {
 		this.timeId =timeId;
 		this.business =business;
 	}
+	
+	public LastDayCrowdEntity(LastDayCrowdEntity ldc) {
+		this.type = ldc.type;
+		this.count = ldc.count;
+		this.timeId = ldc.timeId;
+	}
+	
+	@Override
+	public String toString() {
+		String typeString = "";
+		if(this.type == COSTUMERS_COUNT_TYPE) {
+			typeString = "Count";
+		}else if(this.type == ENTERING_COSTUMERS_TYPE) {
+			typeString = "Entring";
+		}else if(this.type == EXITING_COSTUMERS_TYPE) {
+			typeString = "Exiting";
+		}
+
+		return this.count + " " + typeString;
+	}
 }

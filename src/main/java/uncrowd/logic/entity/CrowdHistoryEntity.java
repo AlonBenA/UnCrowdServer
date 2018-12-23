@@ -65,4 +65,9 @@ public class CrowdHistoryEntity {
 
 	public CrowdHistoryEntity() {
 	}
+	
+	@Override
+	public String toString() {
+		return "Time: " + dateTime + " Count: "+ crowdCount;
+	}
 }

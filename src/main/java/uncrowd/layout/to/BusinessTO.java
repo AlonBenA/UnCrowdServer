@@ -1,6 +1,5 @@
 package uncrowd.layout.to;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,6 +10,7 @@ import uncrowd.logic.entity.BusinessEntity;
 import uncrowd.logic.entity.BusinessTypeEntity;
 import uncrowd.logic.entity.LastDayCrowdEntity;
 import uncrowd.logic.entity.OpeningHoursEntity;
+import uncrowd.utils.TimeUtils;
 
 public class BusinessTO {
 
@@ -81,8 +81,7 @@ public class BusinessTO {
 			ListIterator<LastDayCrowdEntity> li = lastDayCrowdList.listIterator(lastDayCrowdList.size());
 	
 			int currTime = 
-					LocalDateTime.now().toLocalTime().getHour() * 100 + 
-					LocalDateTime.now().toLocalTime().getMinute();
+					TimeUtils.getCurrTime();
 
 			// Iterate in reverse.
 			while(li.hasPrevious()) {

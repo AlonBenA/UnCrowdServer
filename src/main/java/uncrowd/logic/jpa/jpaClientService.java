@@ -1,7 +1,6 @@
 package uncrowd.logic.jpa;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,24 +14,15 @@ import uncrowd.jpadal.LastDayCrowdDao;
 
 import uncrowd.jpadal.OpeningHoursDao;
 import uncrowd.logic.ClientService;
-import uncrowd.logic.entity.AverageEntity;
 import uncrowd.logic.entity.BusinessEntity;
 import uncrowd.logic.entity.BusinessTypeEntity;
-import uncrowd.logic.entity.CrowdHistoryEntity;
-import uncrowd.logic.entity.LastDayCrowdEntity;
-import uncrowd.logic.entity.OpeningHoursEntity;
-import uncrowd.logic.ml.testing.TestSetConverter;
+import uncrowd.logic.fakes.FakeDataCreator;
 
 @Service
 public class jpaClientService implements ClientService {
 
-	private AverageDao averages;
 	private BusinessDao businesses;
-	private BusinessTypeDao businessTypes;
-	private CrowdHistoryDao crowdHistory;
-	private LastDayCrowdDao lastDayCrowd;
-	private OpeningHoursDao openingHours;
-	
+	private BusinessTypeDao businessTypes;	
 	
 	@Autowired
 	public jpaClientService(AverageDao averages,
@@ -42,12 +32,8 @@ public class jpaClientService implements ClientService {
 								LastDayCrowdDao lastDayCrowd,
 								OpeningHoursDao openingHours) {
 		super();
-		this.averages = averages;
 		this.businesses = businesses;
 		this.businessTypes = businessTypes;
-		this.crowdHistory = crowdHistory;
-		this.lastDayCrowd = lastDayCrowd;
-		this.openingHours = openingHours;
 	}
 	
 	@Override
@@ -146,293 +132,7 @@ public class jpaClientService implements ClientService {
 
 	@Override
 	public void addDeafultValues() {
-		
-		addBusinessA();	
-		addBusinessB();
-	}
-
-	private void addBusinessB() {
-		List<BusinessTypeEntity> types = new ArrayList<>();
-		types2(types);
-		
-		List<AverageEntity> averages = new ArrayList<>();
-		averages(averages);
-		
-		List<LastDayCrowdEntity> lastDayCrowd = new ArrayList<>();
-		lastDayCrowd = lastDayCrowd(lastDayCrowd);
-		
-		List<OpeningHoursEntity> openingHours = new ArrayList<>();
-		openingHours(openingHours);
-		
-		List<CrowdHistoryEntity> crowdHistory = new ArrayList<>();
-		crowdHistory(crowdHistory);
-		
-		
-		BusinessEntity b = new BusinessEntity();
-		b.setAddress("Sheshet Hayamim 202, Bnei Brak");
-		b.setLatitude(32.112825);
-		b.setLongitude(34.814782);
-		b.setCurrCrowdCount(20);
-		b.setCurrCrowdLevel(3);
-		b.setName("Mega");
-		b.setIsMLTestBusiness(true);
-		b.setTypes(types);
-		b.setAverages(averages);
-		b.setLastDayCrowd(lastDayCrowd);
-		b.setOpeningHours(openingHours);
-		b.setCrowdHistory(crowdHistory);
-		b.setNeedsExpectedCountUpdate(true);
-		
-		for(AverageEntity avg : averages) {
-			avg.setBusiness(b);
-		}
-		
-		for(LastDayCrowdEntity ldc : lastDayCrowd) {
-			ldc.setBusiness(b);
-		}
-		
-		for(OpeningHoursEntity oh : openingHours) {
-			oh.setBusiness(b);
-		}
-		
-		for(CrowdHistoryEntity ch : crowdHistory) {
-			ch.setBusiness(b);
-		}
-		
-		businesses.save(b);
-	}
-	
-	private void addBusinessA() {
-		List<BusinessTypeEntity> types = new ArrayList<>();
-		types(types);
-		
-		List<AverageEntity> averages = new ArrayList<>();
-		averages(averages);
-		
-		List<LastDayCrowdEntity> lastDayCrowd = new ArrayList<>();
-		lastDayCrowd2(lastDayCrowd);
-		
-		List<OpeningHoursEntity> openingHours = new ArrayList<>();
-		openingHours(openingHours);
-		
-		List<CrowdHistoryEntity> crowdHistory = new ArrayList<>();
-		crowdHistory(crowdHistory);
-		
-		
-		BusinessEntity b = new BusinessEntity();
-		b.setAddress("Sheshet Hayamim 200, Bnei Brak");
-		b.setLatitude(32.114825);
-		b.setLongitude(34.816782);
-		b.setCurrCrowdCount(0);
-		b.setCurrCrowdLevel(4);
-		b.setName("Toys R Us");
-		b.setIsMLTestBusiness(false);
-		b.setTypes(types);
-		b.setAverages(averages);
-		b.setLastDayCrowd(lastDayCrowd);
-		b.setOpeningHours(openingHours);
-		b.setCrowdHistory(crowdHistory);
-		b.setNeedsExpectedCountUpdate(true);
-		
-		for(AverageEntity avg : averages) {
-			avg.setBusiness(b);
-		}
-		
-		for(LastDayCrowdEntity ldc : lastDayCrowd) {
-			ldc.setBusiness(b);
-		}
-		
-		for(OpeningHoursEntity oh : openingHours) {
-			oh.setBusiness(b);
-		}
-		
-		for(CrowdHistoryEntity ch : crowdHistory) {
-			ch.setBusiness(b);
-		}
-		
-		businesses.save(b);
-	}
-
-	private void types(List<BusinessTypeEntity> types) {
-		BusinessTypeEntity type = new BusinessTypeEntity();
-		type.setName("Toys");
-		types.add(type);
-		this.businessTypes.save(type);
-		
-		type = new BusinessTypeEntity();
-		type.setName("Kids");
-		types.add(type);
-		this.businessTypes.save(type);
-	}
-	
-	private void types2(List<BusinessTypeEntity> types) {
-		BusinessTypeEntity type = new BusinessTypeEntity();
-		type.setName("Dairy");
-		types.add(type);
-		this.businessTypes.save(type);
-		
-		type = new BusinessTypeEntity();
-		type.setName("Meat");
-		types.add(type);
-		this.businessTypes.save(type);
-	}
-	
-	private void averages(List<AverageEntity> averages) {
-		AverageEntity a;
-		
-		for(int i = 0 ; i < 7; i ++) {
-            for(int j = 0 ; j < 24; j ++){
-            	a = new AverageEntity();
-            	a.setAverage((int)Math.round(Math.random() * 100.0));
-            	a.setDay(i);
-            	a.setDateTime(j * 100);
-                averages.add(a);
-            }
-        }
-	}
-	
-	private void crowdHistory(List<CrowdHistoryEntity> crowdHistory) {
-		CrowdHistoryEntity ch = new CrowdHistoryEntity();
-		ch.setCrowdCount(12);
-		ch.setDateTime(1000);
-		ch.setDay(1);
-		crowdHistory.add(ch);
-		
-		ch = new CrowdHistoryEntity();
-		ch.setCrowdCount(22);
-		ch.setDateTime(1100);
-		ch.setDay(3);
-		crowdHistory.add(ch);
-	}
-	
-	private void lastDayCrowd2(List<LastDayCrowdEntity> lastDayCrowd){
-	
-		LastDayCrowdEntity ldc = new LastDayCrowdEntity();
-		ldc.setCount(15);
-		ldc.setTimeId(1000);
-		ldc.setType(0);
-		lastDayCrowd.add(ldc);
-		
-		ldc = new LastDayCrowdEntity();
-		ldc.setCount(32);
-		ldc.setTimeId(1000);
-		ldc.setType(1);
-		lastDayCrowd.add(ldc);
-		
-		ldc = new LastDayCrowdEntity();
-		ldc.setCount(0);
-		ldc.setTimeId(1000);
-		ldc.setType(2);
-		lastDayCrowd.add(ldc);
-		
-		
-		
-		
-		ldc = new LastDayCrowdEntity();
-		ldc.setCount(15);
-		ldc.setTimeId(1100);
-		ldc.setType(0);
-		lastDayCrowd.add(ldc);
-		
-		ldc = new LastDayCrowdEntity();
-		ldc.setCount(32);
-		ldc.setTimeId(1100);
-		ldc.setType(1);
-		lastDayCrowd.add(ldc);
-		
-		ldc = new LastDayCrowdEntity();
-		ldc.setCount(1);
-		ldc.setTimeId(1100);
-		ldc.setType(2);
-		lastDayCrowd.add(ldc);
-		
-		
-		
-		
-		ldc = new LastDayCrowdEntity();
-		ldc.setCount(15);
-		ldc.setTimeId(1200);
-		ldc.setType(0);
-		lastDayCrowd.add(ldc);
-		
-		ldc = new LastDayCrowdEntity();
-		ldc.setCount(32);
-		ldc.setTimeId(1200);
-		ldc.setType(1);
-		lastDayCrowd.add(ldc);
-		
-		ldc = new LastDayCrowdEntity();
-		ldc.setCount(4);
-		ldc.setTimeId(1200);
-		ldc.setType(2);
-		lastDayCrowd.add(ldc);
-		
-		
-		
-		ldc = new LastDayCrowdEntity();
-		ldc.setCount(15);
-		ldc.setTimeId(1300);
-		ldc.setType(0);
-		lastDayCrowd.add(ldc);
-		
-		ldc = new LastDayCrowdEntity();
-		ldc.setCount(32);
-		ldc.setTimeId(1300);
-		ldc.setType(1);
-		lastDayCrowd.add(ldc);
-		
-		ldc = new LastDayCrowdEntity();
-		ldc.setCount(5);
-		ldc.setTimeId(1300);
-		ldc.setType(2);
-		lastDayCrowd.add(ldc);
-	}
-	
-	private List<LastDayCrowdEntity> lastDayCrowd(List<LastDayCrowdEntity> lastDayCrowd) {
-		return (new TestSetConverter()).getTestData(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
-	}
-	
-	private void openingHours(List<OpeningHoursEntity> openingHours) {
-		OpeningHoursEntity oh = new OpeningHoursEntity();
-		oh.setDay(0);
-		oh.setOpenHour(1100);
-		oh.setCloseHour(1700);
-		openingHours.add(oh);
-		
-		oh = new OpeningHoursEntity();
-		oh.setDay(1);
-		oh.setOpenHour(1000);
-		oh.setCloseHour(1700);
-		openingHours.add(oh);
-		
-		oh = new OpeningHoursEntity();
-		oh.setDay(2);
-		oh.setOpenHour(900);
-		oh.setCloseHour(1700);
-		openingHours.add(oh);
-		
-		oh = new OpeningHoursEntity();
-		oh.setDay(3);
-		oh.setOpenHour(800);
-		oh.setCloseHour(1700);
-		openingHours.add(oh);
-		
-		oh = new OpeningHoursEntity();
-		oh.setDay(4);
-		oh.setOpenHour(700);
-		oh.setCloseHour(1700);
-		openingHours.add(oh);
-		
-		oh = new OpeningHoursEntity();
-		oh.setDay(5);
-		oh.setOpenHour(600);
-		oh.setCloseHour(1700);
-		openingHours.add(oh);
-		
-		oh = new OpeningHoursEntity();
-		oh.setDay(6);
-		oh.setOpenHour(500);
-		oh.setCloseHour(1700);
-		openingHours.add(oh);
+		FakeDataCreator fakeDataCreator = new FakeDataCreator(this.businessTypes, this.businesses);
+		fakeDataCreator.addBusinesses();
 	}
 }

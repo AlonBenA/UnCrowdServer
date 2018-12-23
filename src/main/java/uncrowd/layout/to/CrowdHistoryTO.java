@@ -60,4 +60,9 @@ public class CrowdHistoryTO {
 			this.businessId = entity.getBusiness().getId();
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return "Time: " + dateTime + " Count: "+ crowdCount;
+	}
 }

@@ -1,11 +1,10 @@
 package uncrowd.logic.ml;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import uncrowd.logic.entity.LastDayCrowdEntity;
+import uncrowd.utils.TimeUtils;
 import weka.classifiers.evaluation.NumericPrediction;
 import weka.classifiers.functions.GaussianProcesses;
 import weka.core.Attribute;
@@ -15,27 +14,20 @@ import weka.core.Instances;
 import weka.classifiers.timeseries.WekaForecaster;
 
 public class CrowdPredictor {
-	
-	// The number of minutes to add to the current count in order to get the prediction time
-	private static final int PREDICTION_INTERVAL_MIN = 1;
-	
+		
 	public Prediction predict(int day, int month, int year, List<LastDayCrowdEntity> training, int currCrowdCount, Integer currCrowdCountTime) {
 		Prediction prediction = null;
 		
 		int predictionTime;
 		
 		if(currCrowdCountTime == null) {
-			int currTime = 
-					LocalDateTime.now().toLocalTime().getHour() * 100 + 
-					LocalDateTime.now().toLocalTime().getMinute();
-			currCrowdCountTime = currTime;
+			currCrowdCountTime = TimeUtils.getCurrTime();
 		}
 		
 		// Calculating the time for the next prediction 
-		// (by adding PREDICTION_INTERVAL_MIN to the last crowd update time)
-		predictionTime = getPredictionTime(currCrowdCountTime); 
+		// (by adding CROWD_UPDATES_INTERVAL_SECONDS to the last crowd update time)
+		predictionTime = TimeUtils.getNextUpdateTime(currCrowdCountTime); 
 
-		
 		if(training != null && training.size() > 0 && currCrowdCountTime != null) {
 			
 			// Define the feature and label attributes
@@ -68,39 +60,32 @@ public class CrowdPredictor {
 						trainingOutgoingDataset.add(instance);
 					}
 				}
-				
-				// Predicting the number of costumers entering and exiting
-				double predictedEntering = predictFromTraining(trainingIncomingDataset);
-				double predictedExiting  = predictFromTraining(trainingOutgoingDataset);
-				
-				// Calculating the difference between the predicted entering
-				// (the change predicted from the current count)
-				double predictedDiffFromCurrCount = (predictedEntering - predictedExiting);
-				
-				// Adding the difference with the current crowd count and rounding the result
-				// (if the count results in a negative number, returning 0)
-				int predictionCount = (int)Math.round(Math.max(0, currCrowdCount + predictedDiffFromCurrCount));
-
-				prediction = new Prediction(predictionCount, 
-						predictionTime);
+				if(trainingIncomingDataset.numInstances() > 2 && trainingOutgoingDataset.numInstances() > 2) {
+					// Predicting the number of costumers entering and exiting
+					double predictedEntering = predictFromTraining(trainingIncomingDataset);
+					double predictedExiting  = predictFromTraining(trainingOutgoingDataset);
+					
+					// Calculating the difference between the predicted entering
+					// (the change predicted from the current count)
+					double predictedDiffFromCurrCount = (predictedEntering - predictedExiting);
+					
+					// Adding the difference with the current crowd count and rounding the result
+					// (if the count results in a negative number, returning 0)
+					int predictionCount = (int)Math.round(Math.max(0, currCrowdCount + predictedDiffFromCurrCount));
+	
+					prediction = new Prediction(predictionCount, 
+							predictionTime);
+				}
 			}catch(Exception ex) {
 				ex.printStackTrace(System.err);
 			}
-		}else{
+		}
+		
+		if(prediction == null){
 			prediction = new Prediction(currCrowdCount, 
 					predictionTime);
 		}
 		return prediction;
-	}
-	
-	private int getPredictionTime(int currentCrowdTime) {
-		int currCrowdMinute = currentCrowdTime % 100, currCrowdHour = currentCrowdTime / 100;
-		
-		if(currCrowdMinute + PREDICTION_INTERVAL_MIN <= 59) {
-			return currCrowdHour * 100 + currCrowdMinute + PREDICTION_INTERVAL_MIN;
-		}else {
-			return (currCrowdHour + 1) * 100 + 60 - (currCrowdMinute + PREDICTION_INTERVAL_MIN);
-		}
 	}
 	
 	/**
@@ -144,7 +129,7 @@ public class CrowdPredictor {
 	        NumericPrediction predForTarget = predsAtStep.get(0);
           	//System.out.print("" + predForTarget.predicted() + " ");
           	predictedValue = predForTarget.predicted();
-		} catch (Exception e) {
+		}catch (Exception e) {
 			e.printStackTrace();
 		}
 		

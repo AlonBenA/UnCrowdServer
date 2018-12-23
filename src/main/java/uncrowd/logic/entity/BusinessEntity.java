@@ -34,6 +34,8 @@ public class BusinessEntity {
 	Boolean needsExpectedCountUpdate;
 	// Indicating if we need to calculate the expected count cause there was an actual count update
 	Boolean isMLTestBusiness;
+	// Indicating if we need to fill the business fake last day crowd data
+	Boolean isFakeBusiness;
 	List<AverageEntity> averages;
 	List<CrowdHistoryEntity> crowdHistory;
 	List<LastDayCrowdEntity> lastDayCrowd;
@@ -129,6 +131,12 @@ public class BusinessEntity {
 		this.isMLTestBusiness = isMLTestBusiness;
 	}
 	
+	public Boolean getIsFakeBusiness() {
+		return isFakeBusiness;
+	}
+	public void setIsFakeBusiness(Boolean isFakeBusiness) {
+		this.isFakeBusiness = isFakeBusiness;
+	}
 	@OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
     public List<AverageEntity> getAverages() {
         return averages;
@@ -166,6 +174,29 @@ public class BusinessEntity {
     }
     
 	public BusinessEntity(){
+		this.needsExpectedCountUpdate = false;
+	}
+	
+	public BusinessEntity(String name, 
+							String address, 
+							Double latitude, 
+							Double Longitude, 
+							Integer currCrowdCount,
+							Integer currCrowdTime,
+							Integer currCrowdLevel,
+	// Indicating if we need to calculate the expected count cause there was an actual count update
+							Boolean isMLTestBusiness,
+	// Indicating if we need to fill this business with fake data
+							Boolean isFakeBusiness) {
+		this.name = name;
+		this.address = address;
+		this.latitude = latitude;
+		this.Longitude = Longitude;
+		this.currCrowdCount = currCrowdCount;
+		this.currCrowdTime = currCrowdCount;
+		this.currCrowdLevel = currCrowdLevel;
+		this.isMLTestBusiness = isMLTestBusiness;
+		this.isFakeBusiness = isFakeBusiness;
 		this.needsExpectedCountUpdate = false;
 	}
 	
