@@ -13,10 +13,12 @@ import uncrowd.jpadal.CrowdHistoryDao;
 import uncrowd.jpadal.LastDayCrowdDao;
 
 import uncrowd.jpadal.OpeningHoursDao;
+import uncrowd.logic.BusinessAlternativesCalculator;
 import uncrowd.logic.ClientService;
 import uncrowd.logic.entity.BusinessEntity;
 import uncrowd.logic.entity.BusinessTypeEntity;
 import uncrowd.logic.fakes.FakeDataCreator;
+import uncrowd.utils.LocationUtils;
 
 @Service
 public class jpaClientService implements ClientService {
@@ -80,14 +82,14 @@ public class jpaClientService implements ClientService {
 			// Only if there is a matching type
 			if(doesTypeMatch) {
 				// Checking if the name also is in the given one
-				if(name == null || name.equals("") || 
+				if(name == null || name.equals("") || name.equals("null") ||
 						bus.getName().toLowerCase().contains(name.toLowerCase())) {
 					
 					System.out.println("Name fits: " + bus.getName());
 					
 					// Calculating the distance between the client's current location and the buisiness's location
 					// (ignoring altitude)
-					double distanceFromBusiness = Math.abs(LocationHelpers.distance(clientLatitude, 
+					double distanceFromBusiness = Math.abs(LocationUtils.distance(clientLatitude, 
 							bus.getLatitude(), 
 							clientLongitude, 
 							bus.getLongitude(), 
@@ -130,6 +132,15 @@ public class jpaClientService implements ClientService {
 				.orElse(null);
 	}
 
+	@Override
+	public List<BusinessEntity> getAlternatives(long businessId) {
+		List<BusinessEntity> allList = new ArrayList<>();
+		this.businesses.findAll()
+			.forEach(allList::add);
+		
+		return new BusinessAlternativesCalculator(allList, businessId).calculateAlternatives();
+	}
+	
 	@Override
 	public void addDeafultValues() {
 		FakeDataCreator fakeDataCreator = new FakeDataCreator(this.businessTypes, this.businesses);

@@ -1,6 +1,6 @@
-package uncrowd.logic.jpa;
+package uncrowd.utils;
 
-public final class LocationHelpers {
+public final class LocationUtils {
 	/**
 	 * Calculate distance between two points in latitude and longitude taking
 	 * into account height difference. To ignore height

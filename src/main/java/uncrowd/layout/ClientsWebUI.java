@@ -4,6 +4,7 @@ package uncrowd.layout;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -27,6 +28,11 @@ public class ClientsWebUI {
 	@Autowired
 	public void setService(ClientService clientService) {
 		this.clientService = clientService;
+	}
+	
+	@PostConstruct
+	public void initializeBusinesses() {
+		this.clientService.addDeafultValues();
 	}
 	
     @RequestMapping("/hello/{name}")
@@ -83,6 +89,16 @@ public class ClientsWebUI {
 		return typesTO;
 	}
 	
+	// Local host 
+	//http://localhost:8083/Alternatives/{id}
+	@RequestMapping(
+			method=RequestMethod.GET,
+			path="/Alternatives/{id}",
+			produces=MediaType.APPLICATION_JSON_VALUE)
+	public List<BusinessTO> getAlternatives(@PathVariable("id") Long id) {
+		
+		return convertBusinessEntityToTO(clientService.getAlternatives(id));		
+	}	
 	
 	// Local host 
 	//http://localhost:8083/Businessinfo/id
@@ -106,15 +122,6 @@ public class ClientsWebUI {
 			@RequestParam(name="page", required=false, defaultValue="0") int page	) throws Exception {
 		System.out.println("getAllBusinesses received : lat = " + latitude + " lon = " + longitude);
 		return convertBusinessEntityToTO(this.clientService.getAllBusinesses(longitude, latitude, size, page));
-	}
-	
-	// Local host 
-	//http://localhost:8083/deafults
-	@RequestMapping(
-			method=RequestMethod.PUT,
-			path="/deafults")
-	public void addDeafultValues () throws Exception {		
-		this.clientService.addDeafultValues();
 	}
 	
 	private List<BusinessTO> convertBusinessEntityToTO(List<BusinessEntity> entitiesList){

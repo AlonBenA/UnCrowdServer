@@ -18,5 +18,7 @@ public interface ClientService {
 	
 	public BusinessEntity getBusinessUpdate(long businessId);
 	
+	public List<BusinessEntity> getAlternatives(long businessId);
+	
 	public void addDeafultValues();
 }
