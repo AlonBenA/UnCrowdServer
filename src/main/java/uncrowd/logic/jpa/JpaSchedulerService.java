@@ -5,12 +5,14 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.assertj.core.util.VisibleForTesting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import uncrowd.jpadal.BusinessDao;
 import uncrowd.jpadal.LastDayCrowdDao;
 import uncrowd.logic.SchedualerService;
+import uncrowd.logic.entity.AverageEntity;
 import uncrowd.logic.entity.BusinessEntity;
 import uncrowd.logic.entity.LastDayCrowdEntity;
 import uncrowd.logic.ml.CrowdPredictor;
@@ -44,7 +46,6 @@ public class JpaSchedulerService implements SchedualerService{
 			int year = now.get(Calendar.YEAR);
 			int month = now.get(Calendar.MONTH);
 			if(bis.getIsMLTestBusiness() || bis.getIsFakeBusiness()) {
-				// TODO: Remove this, this is only for testing
 				int currCrowd = 0, currCrowdTime = 0;
 				List<LastDayCrowdEntity> ldcUpdated = new ArrayList<>();
 				int currTime = 
@@ -76,9 +77,12 @@ public class JpaSchedulerService implements SchedualerService{
 			bis.setExpectedCrowdCount(prediction.getPrediction());
 			bis.setExpectedCountTime(prediction.getPredictionTime());
 
-			// TODO: Get this back when working with a real system
-			// Indicating there is no need to update the current business
-			// bis.setNeedsExpectedCountUpdate(false);
+			if(!bis.getIsMLTestBusiness() && !bis.getIsFakeBusiness()) {
+				// Indicating there is no need to update the current business
+				bis.setNeedsExpectedCountUpdate(false);
+			}
+			
+			updateCrowdLevel(bis);
 			
 			// Updating the DB with the new details
 			businesses.save(bis);
@@ -98,5 +102,37 @@ public class JpaSchedulerService implements SchedualerService{
 			bis.setLastDayCrowd(null);
 			businesses.save(bis);
 		}
+	}
+	
+	@VisibleForTesting
+	public void updateCrowdLevel(BusinessEntity bis) {
+		List<AverageEntity> averages = bis.getAverages();
+		int minAverage = -1;
+		int maxAverage = -1;
+		int crowdLevel = 1;
+		
+		for (AverageEntity average : averages) {
+			if (average.getAverage() > maxAverage) {
+				maxAverage = average.getAverage();
+			}
+			
+			if (average.getAverage() < minAverage || minAverage == -1) {
+				minAverage = average.getAverage();
+			}
+		}
+		
+		int averagesDifference = maxAverage - minAverage;
+		
+		if (averagesDifference > 0) {
+			if (bis.getCurrCrowdCount() >= maxAverage) {
+				crowdLevel = 5;
+			} else if (bis.getCurrCrowdCount() <= minAverage) {
+				crowdLevel = 1;
+			} else {
+				crowdLevel = (int)Math.ceil((double)(bis.getCurrCrowdCount() - minAverage) / (double)(averagesDifference / 5.0));
+			}
+		}
+		
+		bis.setCurrCrowdLevel(crowdLevel);
 	}
 }

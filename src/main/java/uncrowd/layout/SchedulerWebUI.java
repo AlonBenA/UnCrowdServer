@@ -16,7 +16,7 @@ public class SchedulerWebUI {
 	}
 	
 	// Local host 
-	//http://localhost:8083/timeToUpdate
+	//http://localhost:8083/updatePredictions
 	@RequestMapping(
 			method=RequestMethod.POST,
 			path="/updatePredictions")
@@ -27,7 +27,7 @@ public class SchedulerWebUI {
 	}
 	
 	// Local host 
-	//http://localhost:8083/updatePredictions
+	//http://localhost:8083/endOfDay
 	@RequestMapping(
 			method=RequestMethod.POST,
 			path="/endOfDay")
