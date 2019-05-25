@@ -115,10 +115,6 @@ public class FakeDataCreator {
 				types.add(businessTypesList.get((int)Math.round(Math.random() * (TYPES_NAMES.length-1))));
 			}
 			
-			bis.setTypes(new ArrayList<>(types));
-			bis.setOpeningHours(getOpeningHours());
-			bis.setAverages(getAverages());
-			
 			if(bis.getIsMLTestBusiness()) {
 				bis.setLastDayCrowd(lastDayCrowdTestSet());
 				bis.setNeedsExpectedCountUpdate(true);
@@ -126,6 +122,10 @@ public class FakeDataCreator {
 				bis.setLastDayCrowd(lastDayCrowdFakeCreator.getRandomLastDayCrowd());
 				bis.setNeedsExpectedCountUpdate(true);
 			}
+			
+			bis.setTypes(new ArrayList<>(types));
+			bis.setOpeningHours(getOpeningHours());
+			bis.setAverages(getAverages(bis));
 			
 			for(AverageEntity avg : bis.getAverages()) {
 				avg.setBusiness(bis);
@@ -160,14 +160,28 @@ public class FakeDataCreator {
 		}
 	}
 	
-	private List<AverageEntity> getAverages() {
+	private List<AverageEntity> getAverages(BusinessEntity businessToGetAverages) {
 		List<AverageEntity> averages = new ArrayList<>();
 		AverageEntity a;
+		
+		// Calculating the max count for this business:
+		// (for a non fake business it is assumed as 10)
+		Integer maxCrowdCount = 10;
+		
+		if (businessToGetAverages.getIsFakeBusiness() || businessToGetAverages.getIsMLTestBusiness()) {
+			for (LastDayCrowdEntity ldc : businessToGetAverages.getLastDayCrowd()) {
+				if (ldc.getType() == LastDayCrowdEntity.COSTUMERS_COUNT_TYPE) {
+					if (ldc.getCount() > maxCrowdCount) {
+						maxCrowdCount = ldc.getCount();
+					}
+				}
+			}
+		}
 		
 		for(int i = 0 ; i < 7; i ++) {
             for(int j = 0 ; j < 24; j ++){
             	a = new AverageEntity();
-            	a.setAverage((int)Math.round(Math.random() * 100.0));
+            	a.setAverage((int)Math.round(Math.random() * (double)maxCrowdCount));
             	a.setDay(i);
             	a.setDateTime(j * 100);
                 averages.add(a);

@@ -98,7 +98,6 @@ public class BusinessTO {
 				}
 			}
 			
-			// TODO: Put this 3 in a const
 			// Taking only the last 3 records back
 			if(crowdHistory.size() >= 3){
 				crowdHistory = crowdHistory.subList(0, 3);

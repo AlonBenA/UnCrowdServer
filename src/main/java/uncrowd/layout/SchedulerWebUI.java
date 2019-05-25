@@ -34,7 +34,6 @@ public class SchedulerWebUI {
 	public void endOfDay () throws Exception {
 		
 		System.out.println("\n\n End of day update \n\n");
-		// TODO: Remove from comment after done testing
-		//this.schedualerService.updateEndOfDay();
+		this.schedualerService.updateEndOfDay();
 	}
 }

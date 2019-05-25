@@ -97,7 +97,6 @@ public class JpaSchedulerService implements SchedualerService{
 			.forEach(allList::add);
 		
 		for(BusinessEntity bis : allList) {
-			// TODO: Calculate averages
 			lastDayCrowd.deleteAll(bis.getLastDayCrowd());
 			bis.setLastDayCrowd(null);
 			businesses.save(bis);
