@@ -2,8 +2,10 @@ package uncrowd.logic.jpa;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import uncrowd.jpadal.AverageDao;
@@ -39,12 +41,8 @@ public class jpaClientService implements ClientService {
 	}
 	
 	@Override
-	public List<BusinessEntity> getAllBusinesses(double longitude, double latitude, int size, int page) {
-		List<BusinessEntity> allList = new ArrayList<>();
-		
-		this.businesses.findAll()
-			.forEach(allList::add);
-		return allList;
+	public List<BusinessEntity> getAllBusinesses(double longitude, double latitude, int size, int page) {		
+		return businesses.findAll(PageRequest.of(page, size)).getContent();
 	}
 
 	@Override
@@ -121,15 +119,12 @@ public class jpaClientService implements ClientService {
 
 	@Override
 	public BusinessEntity getBusinessUpdate(long businessId) {
-		List<BusinessEntity> allList = new ArrayList<>();
-		
-		this.businesses.findAll()
-			.forEach(allList::add);
-		
-		return allList.stream()
-				.filter(business -> business.getId() == businessId)
-				.findAny()
-				.orElse(null);
+		Optional<BusinessEntity> businessFound = this.businesses.findById(businessId);
+		if (businessFound.isPresent()) {
+			return businessFound.get();
+		} else {
+			return null;
+		}
 	}
 
 	@Override

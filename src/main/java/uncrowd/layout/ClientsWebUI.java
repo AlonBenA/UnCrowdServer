@@ -63,7 +63,7 @@ public class ClientsWebUI {
 				try {
 					typesIds.add(Long.parseLong(id));
 				}catch(Exception ex) {
-					System.err.println("RECEIVED WRONG TYPE ID, NOT A LONG!");
+					throw new RuntimeException("RECEIVED WRONG TYPE ID, NOT A LONG!");
 				}
 			}
 		}

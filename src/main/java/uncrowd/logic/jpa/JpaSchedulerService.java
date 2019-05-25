@@ -3,7 +3,6 @@ package uncrowd.logic.jpa;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.assertj.core.util.VisibleForTesting;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +32,7 @@ public class JpaSchedulerService implements SchedualerService{
 	
 	@Override
 	public void updateBusinessesNewTimePeriod() {
-		List<BusinessEntity> allList = new ArrayList<>();
-		
-		this.businesses.findAll()
-			.forEach(allList::add);
-		List<BusinessEntity> needsUpdate = allList.stream().filter(bis-> bis.getNeedsExpectedCountUpdate()).collect(Collectors.toList());
+		List<BusinessEntity> needsUpdate = this.businesses.findByNeedsExpectedCountUpdateTrueOrderById();
 		
 		for(BusinessEntity bis : needsUpdate) {
 			Calendar now = Calendar.getInstance();

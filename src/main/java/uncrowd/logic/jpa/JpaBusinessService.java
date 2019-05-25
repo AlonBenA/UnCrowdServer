@@ -1,10 +1,10 @@
 package uncrowd.logic.jpa;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import uncrowd.jpadal.BusinessDao;
@@ -75,17 +75,10 @@ public class JpaBusinessService implements BusinessService {
 
 	@Override
 	public BusinessData getBusinessData(BusinessData businessId) {
-		List<BusinessEntity> allList = new ArrayList<>();
+        // Searching for the first business that is not fake or for tests
+		List<BusinessEntity> realBusinesses = this.BusinessTable.findByIsMLTestBusinessFalseAndIsFakeBusinessFalseOrderById(PageRequest.of(0, 1));
 		
-		this.BusinessTable.findAll()
-			.forEach(allList::add);
-
-		// Searching for the first business that is not fake or for tets
-		for(BusinessEntity bis: allList) {
-			if(!bis.getIsFakeBusiness() && !bis.getIsMLTestBusiness()) {
-				businessId.setId(bis.getId());
-			}
-		}
+		businessId.setId(realBusinesses.get(0).getId());
 		
 		businessId.setTime(TimeUtils.CROWD_UPDATES_INTERVAL_SECONDS);
 		return businessId;
