@@ -57,8 +57,8 @@ public class FakeDataCreator {
 					true),
 			new BusinessEntity("Mcdonalds", 
 					"Bnei Efraim 190, Tel-Aviv", 
-					32.114263, 
-					34.819194,
+					32.122043, 
+					34.821835,
 					// crowd count
 					0, 
 					// crowd time
