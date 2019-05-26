@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import org.assertj.core.util.VisibleForTesting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -98,7 +97,6 @@ public class JpaSchedulerService implements SchedualerService{
 		}
 	}
 	
-	@VisibleForTesting
 	public void updateCrowdLevel(BusinessEntity bis) {
 		List<AverageEntity> averages = bis.getAverages();
 		int minAverage = -1;
